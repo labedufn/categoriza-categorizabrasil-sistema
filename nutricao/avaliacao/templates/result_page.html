@@ -1,0 +1,27 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+{% load bootstrap5 %}
+{% block title %}
+<div class="text-center">
+    <h1>Resultado</h1>
+</div>
+{% endblock %}
+{% block content %}
+<div class="container">
+    <ul>
+        {% for result in   %}
+        <li>
+            <p class=""> <strong>{{ result.pergunta }}</strong></p>
+            <p class="">Resposta: {{ result.resposta }}</p>
+            <p class="">Descrição: {{ result.descricao|default:"Nenhuma descrição fornecida." }}</p>
+        </li>
+        {% endfor %}
+        <div>
+            <p>soma total {{soma}}</p>
+        </div>
+        <a href="{% url 'avaliacao' %}">Tente novamente</a>
+    </ul>
+    
+</div>
+{% endblock %}

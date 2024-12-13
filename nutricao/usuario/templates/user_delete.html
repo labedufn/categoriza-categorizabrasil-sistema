@@ -1,0 +1,145 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load bootstrap5 %}
+{% block title %}{% endblock %}
+{% block content %}
+<style>
+    :root {
+        --primary-orange: #FF6B35;
+        --dark-blue: #1A237E;
+        --light-orange: #FFA063;
+        --background-color: #F4F7F6;
+    }
+
+    body {
+        background-color: var(--background-color);
+    }
+
+    .title-heading {
+        color: var(--dark-blue);
+        font-weight: bold;
+        margin: 2rem 0;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        position: relative;
+    }
+
+    .title-heading h2::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 4px;
+        background: linear-gradient(to right, var(--primary-orange), var(--dark-blue));
+    }
+
+    .form-container {
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 6px 15px rgba(26, 35, 126, 0.1);
+        padding: 2.5rem;
+        margin: 2rem auto;
+        border: 1px solid rgba(26, 35, 126, 0.1);
+    }
+
+    .confirmation-message {
+        color: var(--dark-blue);
+        font-size: 1.1rem;
+        text-align: center;
+        margin-bottom: 2rem;
+        font-weight: 500;
+    }
+
+    .btn-container {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    .btn-danger {
+        background-color: var(--primary-orange) !important;
+        border-color: var(--primary-orange) !important;
+        color: white;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-danger:hover {
+        background-color: var(--light-orange) !important;
+        border-color: var(--light-orange) !important;
+        transform: translateY(-3px);
+        box-shadow: 0 4px 10px rgba(255, 107, 53, 0.3);
+    }
+
+    .btn-secondary {
+        background-color: var(--dark-blue) !important;
+        border-color: var(--dark-blue) !important;
+        color: white;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-secondary:hover {
+        background-color: #273469 !important;
+        border-color: #273469 !important;
+        transform: translateY(-3px);
+        box-shadow: 0 4px 10px rgba(26, 35, 126, 0.3);
+    }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+        .btn-container {
+            flex-direction: column;
+        }
+
+        .btn-danger, .btn-secondary {
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+    }
+
+    /* Animações */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .form-container {
+        animation: fadeIn 0.5s ease-out;
+    }
+</style>
+
+
+<div class="form-container">
+    <p class="confirmation-message">Tem certeza que deseja excluir o usuario "{{ user.nome }}"?</p>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="btn-container">
+            <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
+            <a href="{% url 'home' %}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,186 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load bootstrap5 %}
+{% block title %}{% endblock %}
+{% block content %}
+<style>
+    :root {
+        --primary-orange: #FF6B35;
+        --dark-blue: #1A237E;
+        --light-orange: #FFA063;
+        --background-color: #F4F7F6;
+        --gray-text: #666;
+    }
+
+    body {
+        background-color: var(--background-color);
+    }
+
+    .title-heading {
+        color: var(--dark-blue);
+        font-weight: bold;
+        margin: 2rem 0;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        position: relative;
+    }
+
+    .title-heading h2::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 4px;
+        background: linear-gradient(to right, var(--primary-orange), var(--dark-blue));
+    }
+
+    .card {
+        border-radius: 12px;
+        box-shadow: 0 6px 15px rgba(26, 35, 126, 0.1);
+        border: 1px solid rgba(26, 35, 126, 0.1);
+    }
+
+    .card-body {
+        padding: 2.5rem;
+    }
+
+    .form-label {
+        color: var(--dark-blue);
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control {
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        padding: 0.75rem;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: var(--dark-blue);
+        box-shadow: 0 0 0 0.2rem rgba(26, 35, 126, 0.25);
+    }
+
+    .form-text {
+        color: var(--gray-text);
+        font-size: 0.875rem;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-orange) !important;
+        border-color: var(--primary-orange) !important;
+        color: white;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        margin-top: 1rem;
+    }
+
+    .btn-primary:hover {
+        background-color: var(--light-orange) !important;
+        border-color: var(--light-orange) !important;
+        transform: translateY(-3px);
+        box-shadow: 0 4px 10px rgba(255, 107, 53, 0.3);
+    }
+
+    .btn-secondary {
+        background-color: var(--dark-blue) !important;
+        border-color: var(--dark-blue) !important;
+        color: white;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        margin-top: 1rem;
+    }
+
+    .btn-secondary:hover {
+        background-color: #273469 !important;
+        border-color: #273469 !important;
+        transform: translateY(-3px);
+        box-shadow: 0 4px 10px rgba(26, 35, 126, 0.3);
+    }
+
+    /* Estilização para mensagens de erro */
+    .invalid-feedback {
+        color: var(--primary-orange);
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+
+    /* Estilização para campos com erro */
+    .is-invalid {
+        border-color: var(--primary-orange) !important;
+    }
+
+    /* Animação de carregamento do formulário */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .card {
+        animation: fadeIn 0.5s ease-out;
+    }
+
+    /* Estilo para campos select */
+    select.form-control {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%231a237e' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 0.75rem center;
+        background-size: 16px 12px;
+    }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+        .card {
+            width: 100% !important;
+            margin: 1rem;
+        }
+
+        .btn-primary, .btn-secondary {
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+    }
+</style>
+<div class="container">
+    <div class="card w-75 mx-auto">
+        <div class="card-body">
+            <div class="text-center title-heading">
+                <h2>Atualizar Usuario</h2>
+            </div>
+            <div class="row">
+                <div class="container">
+                    <div class="row">
+                        <div class="col"></div>
+                        <div class="col-8">
+                            <form method="post">
+                                {% csrf_token %}
+                                {% bootstrap_form form %}
+                                <div class="d-flex justify-content-between">
+                                    <button type="submit" class="btn btn-primary">Atualizar</button>
+                                    <a href="{% url 'home' %}" class="btn btn-secondary">Cancelar</a>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

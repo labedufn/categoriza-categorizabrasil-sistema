@@ -1,0 +1,188 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+{% load bootstrap5 %}
+
+{% block title %}{% endblock %}
+{% block content %}
+<br>
+<div class="container card w-50">
+    <div class="card-body">
+        <div class="text-center title-heading">
+            <h1>Fazer Login</h1>
+        </div>
+        
+        
+        <style>
+            .title-heading {
+                color: #1a237e;
+                font-weight: bold;
+                margin: 2rem 0;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+            }
+
+            .form-container {
+                background-color: white;
+                border-radius: 12px;
+                box-shadow: 0 4px 16px rgba(26, 35, 126, 0.1);
+                padding: 2.5rem;
+                margin: 2rem auto;
+                max-width: 800px;
+            }
+
+            .form-label {
+                color: #1a237e;
+                font-weight: 600;
+                margin-bottom: 0.5rem;
+            }
+
+            .form-control {
+                border: 2px solid #e0e0e0;
+                border-radius: 6px;
+                padding: 0.75rem;
+                transition: all 0.3s ease;
+                font-size: 1rem;
+            }
+
+            .form-control:focus {
+                border-color: #1a237e;
+                box-shadow: 0 0 0 0.2rem rgba(26, 35, 126, 0.15);
+            }
+
+            .form-text {
+                color: #666;
+                font-size: 0.875rem;
+                margin-top: 0.25rem;
+            }
+
+            /* Estilo especial para campos de senha */
+            input[type="password"] {
+                letter-spacing: 0.1em;
+            }
+
+            /* Estilo para campos obrigatórios */
+            .required label::after {
+                content: "*";
+                color: #ff5722;
+                margin-left: 4px;
+            }
+
+            .btn-primary {
+                background-color: #ff5722 !important;
+                border-color: #ff5722 !important;
+                color: white;
+                padding: 1rem 2.5rem;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                transition: all 0.3s ease;
+                margin-top: 1.5rem;
+                border-radius: 6px;
+            }
+
+            .btn-primary:hover {
+                background-color: #f4511e !important;
+                border-color: #f4511e !important;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(244, 81, 30, 0.2);
+            }
+
+            /* Mensagens de erro */
+            .invalid-feedback {
+                color: #ff5722;
+                font-size: 0.875rem;
+                margin-top: 0.25rem;
+            }
+
+            .is-invalid {
+                border-color: #ff5722 !important;
+            }
+
+            /* Animação de entrada */
+            @keyframes slideIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .form {
+                animation: slideIn 0.5s ease-out;
+            }
+
+            /* Separador de seções */
+            .form-section {
+                border-bottom: 2px solid #e0e0e0;
+                margin-bottom: 2rem;
+                padding-bottom: 1rem;
+            }
+
+            /* Responsividade */
+            @media (max-width: 768px) {
+                .form-container {
+                    padding: 1.5rem;
+                    margin: 1rem;
+                    border-radius: 8px;
+                }
+
+                .btn-primary {
+                    width: 100%;
+                    padding: 0.75rem 1rem;
+                }
+            }
+
+            /* Tooltip customizado */
+            .tooltip {
+                background-color: #1a237e;
+                color: white;
+                padding: 0.5rem 1rem;
+                border-radius: 4px;
+                font-size: 0.875rem;
+            }
+
+            /* Checkbox estilizado */
+            .form-check-input:checked {
+                background-color: #ff5722;
+                border-color: #ff5722;
+            }
+            .link-secondary{
+                color:#1a237e !important;
+            }
+            .link-secondary:hover{
+                color: #ff5722;
+                opacity: 80%;
+            }
+            
+        </style>
+
+        <div class="row">
+
+            <div class="container">
+                <div class="row">
+                    <br /><br />
+                    <div class="col"></div>
+                    <div class="col-8">
+                        <form class="form" method="post">
+                            {% csrf_token %}
+                            {% bootstrap_form form %}
+                            <p><a href="{% url 'cadastro'%}" class="link-secondary link-underline-opacity-0 link-underline-opacity-0-hover">Não possui conta?</a></p>
+                            {% buttons %}
+                            <button type="submit" class="btn btn-primary">Entrar</button>
+                            {% endbuttons %}
+                        </form>
+                    </div>
+                    <div class="col"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    {% endblock %}

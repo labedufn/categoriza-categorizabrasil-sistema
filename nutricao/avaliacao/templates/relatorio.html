@@ -1,0 +1,259 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+{% load filtros %}
+{% load bootstrap5 %}
+{% block title %}{% endblock %}
+
+{% block content %}
+<div class="container-fluid report-wrapper py-4 px-md-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-xl-8">
+            <div class="">
+                <div class="text-white py-4 text-center position-relative">
+                    <div class="header-content">
+                        <h1 class="display-6 fw-bold mb-2 text-dark-blue">RELATÓRIO DO ESTABELECIMENTO</h1>
+                        <h2 class="display-7 fw-normal text-orange">{{ form.Empresa.nome_fantasia }}</h2>
+                    </div>
+
+                </div>
+                <div class="card-body p-4 p-md-5 bg-light">
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="">
+                                        <div class="card question-section shadow-sm mb-5">
+                                            <div class="card-header bg-dark-blue text-white py-3">
+                                                <h3 class="h5 mb-0 text-center">Classificação</h3>
+                                            </div>
+                                            <div class="mt-4 mb-4 text-center">
+                                                {% if form.total_pontuacao|less_than_or_equal:'0,2'%}
+                                                <img src="{% static 'core/img/A_PNG_.png' %}" alt="Classificação A"
+                                                    class="imagem-classificacao">
+                                                {% elif form.total_pontuacao|less_than_or_equal:'3,68' %}
+                                                <img src="{% static 'core/img/B_PNG_.png' %}" alt="Classificação B"
+                                                    class="imagem-classificacao">
+                                                {% elif form.total_pontuacao|less_than_or_equal:'69,155' %}
+                                                <img src="{% static 'core/img/c_PNG_.png' %}" alt="Classificação C"
+                                                    class="imagem-classificacao">
+                                                {% else %}
+                                                <span class="text-dark  display-1">PENDENTE</span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-4 p-md-5 bg-light">
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="">
+                                        <div class="card question-section shadow-sm mb-5">
+                                            <div class="card-header bg-dark-blue text-white py-3">
+                                                <h3 class="h5 mb-0 text-center">Áreas de avaliação</h3>
+                                            </div>
+                                            <ul class="evaluation-list ">
+                                                <li>
+                                                    Abastecimento de Água
+                                                    <span class="score">{{ form.pt_abastecimento_agua }}</span>
+                                                </li>
+                                                <li>
+                                                    Estrutura
+                                                    <span class="score">{{ form.pt_estrutura }}</span>
+                                                </li>
+                                                <li>
+                                                    Higienização
+                                                    <span class="score">{{ form.pt_higienizacao }}</span>
+                                                </li>
+                                                <li>
+                                                    Controle Integrado
+                                                    <span class="score">{{ form.pt_controle_integrado }}</span>
+                                                </li>
+                                                <li>
+                                                    Manipuladores
+                                                    <span class="score">{{ form.pt_manipuladores }}</span>
+                                                </li>
+                                                <li>
+                                                    Matérias-Primas
+                                                    <span class="score">{{ form.pt_materias_primas }}</span>
+                                                </li>
+                                                <li>
+                                                    Preparo de Alimentos
+                                                    <span class="score">{{ form.pt_preparo_alimento }}</span>
+                                                </li>
+                                                <li>
+                                                    Armazenamento
+                                                    <span class="score">{{ form.pt_armazenamento }}</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="card question-section shadow-sm mb-5">
+                                        <div class="card-header bg-dark-blue py-3">
+                                            <h3 class="h5 mb-0 text-center text-white ">Respostas das Questões</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            {% for label in questoes_texto %}
+                                            <div class="mb-3 pb-3 border-bottom">
+                                                <div class="d-flex justify-content-between align-items-start mx-2 mt-2">
+                                                    <strong class="text-dark-blue flex-grow-1 me-3">{{ label }}</strong>
+                                                    <span class="badge bg-orange text-white">{{ forloop.counter }}</span>
+                                                </div>
+
+                                                {% with questao=form|get_questao:forloop.counter %}
+                                                <p class="mt-2 text-dark mx-2">Resposta: {{ questao.resposta }}</p>
+                                                {% if questao.pontuacao %}
+                                                <p class="mt-2 text-dark mx-2">Pontuação: {{ questao.pontuacao }}</p>
+                                                {% endif %}
+                                                {% endwith %}
+
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <style>
+                :root {
+                    --dark-blue: #1a237e;
+                    --dark-blue-hover: #121858;
+                    --orange: #ff5722;
+                    --orange-light: rgba(255, 87, 34, 0.1);
+                    --text-dark: #2c3345;
+                    --light-gray: #f4f5f7;
+                }
+
+
+                body {
+                    background-color: var(--light-gray);
+                    font-family: 'Inter', 'Roboto', sans-serif;
+                }
+
+
+                .imagem-classificacao {
+                    width: 30rem;
+                    /* ou o tamanho que desejar */
+                    height: auto;
+                    /* outros estilos que desejar */
+                }
+
+
+                .report-wrapper {
+                    background-color: transparent;
+                }
+
+                .report-card {
+                    border: none;
+                    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1) !important;
+                }
+
+                .card-header.bg-dark-blue {
+                    background: linear-gradient(135deg, var(--dark-blue), var(--dark-blue-hover)) !important;
+                    position: relative;
+                    border-bottom: 3px solid var(--orange);
+
+                }
+
+                .header-accent {
+                    position: absolute;
+                    bottom: -3px;
+                    left: 0;
+                    right: 0;
+                    height: 5px;
+                    background: var(--orange);
+                }
+
+                .text-orange {
+                    color: var(--orange) !important;
+                }
+
+                .text-white {
+                    color: var(--light-gray) !important;
+                }
+
+                .text-dark-blue {
+                    color: var(--dark-blue) !important;
+                }
+
+                .text-dark {
+                    color: var(--text-dark);
+                }
+
+                .bg-orange-light {
+                    background-color: var(--orange-light) !important;
+                }
+
+                .evaluation-item {
+                    transition: all 0.3s ease;
+                    border: 1px solid rgba(26, 35, 126, 0.1);
+                }
+
+                .evaluation-item:hover {
+                    transform: translateY(-3px);
+                    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+                }
+
+                .badge.bg-orange {
+                    background-color: var(--orange) !important;
+                }
+
+                .evaluation-section {
+                    background-color: white;
+                    border-radius: 12px;
+                    padding: 2.5rem;
+                    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+                    transition: transform 0.3s ease;
+                }
+
+                .evaluation-section:hover {
+                    transform: translateY(-5px);
+                }
+
+                .evaluation-list {
+                    list-style-type: none;
+                    padding: 0;
+                }
+
+                .evaluation-list li {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 1rem 0;
+                    border-bottom: 1px solid #eaeaea;
+                    margin-left: 1rem;
+                    margin-right: 1rem;
+                    color: var(--text-dark);
+                    font-weight: 500;
+                    transition: background-color 0.2s ease;
+                }
+
+                .evaluation-list li:hover {
+                    background-color: rgba(255, 87, 34, 0.05);
+                }
+
+                .evaluation-list li:last-child {
+                    border-bottom: none;
+                }
+
+                .evaluation-list li .score {
+                    color: var(--orange);
+                    font-weight: 700;
+                    font-size: 1.1rem;
+                    background-color: rgba(255, 87, 34, 0.1);
+                    padding: 5px 10px;
+                    border-radius: 20px;
+                }
+            </style>
+            {% endblock %}

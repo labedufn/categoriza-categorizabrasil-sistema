@@ -1,0 +1,168 @@
+{% load static %}
+{% load bootstrap5 %}
+
+<style>
+    .custom-navbar {
+        background-color: #1a237e;
+        padding: 1rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border-bottom: 5px solid #ff5722 ;
+    }
+
+    .navbar-brand img {
+        max-width: 100px;
+        transition: transform 0.3s ease;
+    }
+
+    .navbar-brand img:hover {
+        transform: scale(1.05);
+    }
+
+    .nav-link {
+        color: white !important;
+        font-weight: 500;
+        padding: 0.5rem 1rem !important;
+        margin: 0 0.2rem;
+        transition: all 0.3s ease;
+        border-radius: 4px;
+    }
+
+    .nav-link:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        transform: translateY(-2px);
+    }
+
+    .nav-link.active {
+        background-color: #ff5722 !important;
+        color: white !important;
+    }
+
+    .dropdown-menu {
+        background-color: white;
+        border: none;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        padding: 0.5rem;
+        border-radius: 4px;
+        margin-top: 0.5rem;
+    }
+
+    .dropdown-item {
+        color: #1a237e;
+        padding: 0.7rem 1.5rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        border-radius: 4px;
+    }
+
+    .dropdown-item:hover {
+        background-color: rgba(26, 35, 126, 0.1);
+        color: #ff5722;
+        transform: translateX(5px);
+    }
+
+    .navbar-toggler {
+        border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.75%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    }
+
+    /* Botão de login/logout */
+    .nav-link.auth-button {
+        border: 2px solid #ff5722;
+        color: #ff5722 !important;
+        padding: 0.5rem 1.5rem !important;
+        font-weight: 600;
+    }
+
+    .nav-link.auth-button:hover {
+        background-color: #ff5722;
+        color: white !important;
+    }
+
+    @media (max-width: 991px) {
+        .navbar-nav {
+            padding: 1rem 0;
+        }
+        
+        .nav-link {
+            padding: 0.75rem 1rem !important;
+            margin: 0.2rem 0;
+        }
+
+        .dropdown-menu {
+            background-color: rgba(255, 255, 255, 0.05);
+            box-shadow: none;
+        }
+
+        .dropdown-item {
+            color: white;
+        }
+
+        .dropdown-item:hover {
+            color: #ff5722;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .img{
+            color: white;
+        }
+    }
+</style>
+
+<nav class="navbar navbar-expand-lg custom-navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img src="{% static 'core/img/LOGO.png' %}" class="img-fluid img" alt="Logo">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01"
+            aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                    <a class="nav-link {% if 'home' in request.path %}active{% endif %}" href="{% url 'home' %}">
+                        Usuarios
+                        <span class="visually-hidden">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if 'empresa_list' in request.path %}active{% endif %}" 
+                       href="{% url 'empresa_list' %}">Estabelecimentos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Sobre</a>
+                </li>
+                <li class="nav-item dropdown" id="cadastros">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                        aria-haspopup="true" aria-expanded="false">Cadastrar</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{% url 'empresa' %}">Estabelecimento</a>
+                        <a class="dropdown-item" href="{% url 'cadastros' %}">Usuario</a>
+                    </div>
+                </li>
+            </ul>
+            <ul class="navbar-nav">
+                {% if request.user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link auth-button" href="{% url 'logout' %}">Logout</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link auth-button" href="{% url 'login' %}">Login</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        var tipoUsuario = "{{ request.user.tipo_usuario }}";
+        if (tipoUsuario!="ADM" && tipoUsuario != "PREFEITURA"){
+            li = document.getElementById("cadastros")
+            li.remove();
+        }
+        })
+    </script>
+</nav>

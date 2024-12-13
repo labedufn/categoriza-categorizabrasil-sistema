@@ -1,0 +1,211 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+{% load bootstrap5 %}
+{% block title %}{% endblock %}
+
+{% block content %}
+<div class="container card w-100">
+    <div class="card-body">
+
+        <div>
+            <br>
+            <div class="text-center title-heading">
+                <h1>Avaliação</h1>
+            </div>
+
+
+            <style>
+                .title-heading h1 {
+                    color: #1a237e !important;
+                    font-weight: bold;
+                    margin: 2rem 0;
+                }
+
+                .form label {
+                    color: #1a237e;
+                    font-weight: 600;
+                }
+
+
+
+
+
+
+
+                .form input,
+                .form select,
+                .form textarea {
+                    border: 2px solid #e0e0e0 !important;
+                    border-radius: 4px !important;
+                    padding: 8px !important;
+                    margin-bottom: 1rem !important;
+                    content: "" !important;
+                }
+
+                .form input:focus,
+                .form select:focus,
+                .form textarea:focus {
+                    border-color: #1a237e !important;
+                    box-shadow: 0 0 0 0.2rem rgba(26, 35, 126, 0.25) !important;
+                }
+
+                .btn-primary {
+                    background-color: #ff5722 !important;
+                    border-color: #ff5722 !important;
+                    color: white;
+                    padding: 10px 24px;
+                    font-weight: 600;
+                    transition: all 0.3s ease;
+                }
+
+                .btn-primary:hover {
+                    background-color: #f4511e !important;
+                    border-color: #f4511e !important;
+                    transform: translateY(-2px);
+                }
+
+                .container {
+                    margin-top: 2rem;
+                    margin-bottom: 2rem;
+                }
+
+                /* Estilo para mensagens de erro do formulário */
+                .invalid-feedback {
+                    color: #ff5722;
+                }
+            </style>
+
+            <div class="row">
+
+                <div class="container">
+                    <div class="row">
+                        <br /><br />
+                        <div class="col"></div>
+                        <div class="col-8">
+                            <form class="form" method="post">
+                                {% csrf_token %}
+                                {% bootstrap_form form %}
+
+
+                                {% buttons %}
+                                <button type="submit" class="btn btn-primary">Enviar Formulario</button>
+                                {% endbuttons %}
+                            </form>
+                        </div>
+                        <div class="col"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const form = document.querySelector('form');
+                const question = document.getElementById('id_questao1');
+                const question2 = document.getElementById('id_questao2');
+                const question3 = document.getElementById('id_questao3');
+                const questionsToCheck = [
+                    'id_questao1',
+                    'id_questao2',
+                    'id_questao3'
+                ]
+                function disableAllDescricao(){
+                    const formElements = form.elements;
+                    for (let i = 0; i < formElements.length; i++) {
+                        const element = formElements[i];
+                        if (element.id.includes("descricao")){
+                            element.disabled = true
+                        }
+                    }
+                }
+                function disableDescricao(campo){
+                    campo_descricao = document.getElementById(campo.id+"_descricao")
+                    campo_descricao.value = ""
+                    campo_descricao.disabled = true
+
+                    
+                    
+
+                }
+                function enableDescricao(campo){
+                    
+                        campo_descricao = document.getElementById(campo.id+"_descricao")
+                        campo_descricao.required = true
+                        campo_descricao.disabled = false
+
+                    
+                    
+                }
+                function controllerDescricao(event){
+                    campo = event.target
+                    if (campo.value == "IN"){
+                        enableDescricao(campo)
+                    }
+                    else{
+                        disableDescricao(campo)
+                    }
+
+                }
+                function disableForm(id) {
+                    const formElements = form.elements;
+                    
+
+                    for (let i = 0; i < formElements.length; i++) {
+                        const element = formElements[i];
+                        if (questionsToCheck.includes(element.id) || id+"_descricao" == element.id ) {
+                            continue;
+                        }
+                        element.disabled = true;
+                        if (element.tagName === 'SELECT') {
+                            element.style.backgroundColor = '#f0f0f0';
+                            element.style.cursor = 'not-allowed';
+                        }
+                    }
+                }
+
+                function enableForm() {
+                    const formElements = form.elements;
+
+                    for (let i = 0; i < formElements.length; i++) {
+                        const element = formElements[i];
+
+                        
+                        element.disabled = false;
+
+                        if (element.tagName === 'SELECT') {
+                            element.style.backgroundColor = '';
+                            element.style.cursor = '';
+                        }
+                    }
+                }
+
+                function update_tudo(event) {
+                        console.log('Selected value1:', event.target);
+                        teste = event.target;
+                        if (teste.value === 'IN') {
+                            disableForm(event.target.id);
+                        } else {
+                            enableForm();
+                        }
+                    }
+                disableAllDescricao();
+                const formElements = form.elements;
+                for (let i = 0; i < formElements.length; i++) {
+                    element = formElements[i];
+                    if (!element.id.includes("descricao")&& !questionsToCheck.includes(element.id)){
+                        element.addEventListener('change',controllerDescricao)
+                    }
+                }
+                question.addEventListener('change', update_tudo);
+                question2.addEventListener('change', update_tudo);
+                question3.addEventListener('change', update_tudo);
+                 
+                
+
+            })
+
+        </script>
+    </div>
+
+    {% endblock %}

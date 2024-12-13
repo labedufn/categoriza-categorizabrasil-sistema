@@ -1,0 +1,192 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load bootstrap5 %}
+
+{% block title %}{% endblock %}
+{% block content %}
+<br>
+<div class="text-center title-heading">
+    <h1>Lista dos Estabelecimentos</h1>
+</div>
+<style>
+    .title-heading h1 {
+        color: #1a237e;
+        font-weight: bold;
+        margin: 2rem 0;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+
+    }
+
+    .table-container {
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 1.5rem;
+        margin: 2rem auto;
+    }
+
+    .table {
+        border-collapse: separate;
+        border-spacing: 0;
+        width: 100%;
+        background-color: white;
+    }
+
+    .table thead th {
+        background-color: #1a237e;
+        color: white;
+        font-weight: 600;
+        padding: 1rem;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+        letter-spacing: 0.5px;
+        border: none;
+    }
+
+    .table tbody tr {
+        transition: all 0.3s ease;
+    }
+
+    .table tbody tr:hover {
+        background-color: rgba(26, 35, 126, 0.05);
+    }
+
+    .table tbody td {
+        padding: 1rem;
+        border-bottom: 1px solid #e0e0e0;
+        vertical-align: middle;
+    }
+
+    .btn {
+        margin-top: 1rem;
+        padding: 0.5rem 1rem;
+        font-weight: 600;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+    }
+    .imagem-classificacao {
+        width: 4rem;  /* ou o tamanho que desejar */
+        height: auto;
+        /* outros estilos que desejar */
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+    }
+
+    .btn-success {
+        background-color: rgb(28, 255, 47) !important;
+        border-color: rgb(28, 255, 47) !important;
+        color: white;
+    }
+
+    .btn-success:hover {
+        background-color: rgb(0, 200, 0) !important;
+        border-color: rgb(0, 200, 0) !important;
+    }
+
+    .btn-warning {
+        background-color: rgb(240, 240, 0) !important;
+        border-color: rgb(240, 240, 0) !important;
+        color: white;
+    }
+
+    .btn-warning:hover {
+        background-color: rgb(200, 200, 0) !important;
+        border-color: rgb(200, 200, 0) !important;
+    }
+
+    .btn-danger {
+        background-color: rgb(250, 0, 20);
+        border-color: rgb(250, 0, 20);
+    }
+
+    .btn-danger:hover {
+        background-color: rgb(150, 0, 25);
+        border-color: rgb(150, 0, 25);
+    }
+
+    /* Responsividade para telas menores */
+    @media (max-width: 768px) {
+        .table-responsive {
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+
+        .btn {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.9rem;
+        }
+    }
+</style>
+<div class="table-responsive table-sm">
+
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col" class="text-center">CNPJ</th>
+                <th scope="col" class="text-center">NOME FANSTASIA</th>
+                <th scope="col" class="text-center">ENDEREÇO</th>
+                <th scope="col" class="text-center">BAIRRO</th>
+                <th scope="col" class="text-center">CLASSIFICAÇÃO</th>
+                <th class="text-center">AVALIAR</th>
+                <th class="text-center">EXCLUIR</th>
+                <th class="text-center">EDITAR</th>
+                <th class="text-center">GERAR RELATORIO</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for empresa in object_list %}
+            <tr>
+                <td class="text-center">{{empresa.cnpj}}</td>
+                <td class="text-center">{{empresa.nome_fantasia}}</td>
+                <td class="text-center">{{empresa.endereco}}</td>
+                <td class="text-center">{{empresa.bairro}}</td>
+                <td class="text-center">
+                    {% if empresa.classificacao == 'A' %}
+                    <img src="{% static 'core/img/A_PNG_.png' %}" alt="Classificação A"
+                        class="imagem-classificacao">
+                    {% elif empresa.classificacao == 'B' %}
+                    <img src="{% static 'core/img/B_PNG_.png' %}" alt="Classificação B"
+                        class="imagem-classificacao">
+                    {% elif empresa.classificacao == 'C' %}
+                    <img src="{% static 'core/img/c_PNG_.png' %}" alt="Classificação C"
+                        class="imagem-classificacao">
+                    {% else %}
+                        {{empresa.classificacao}}
+                    {% endif %}
+                </td>
+
+                <td class="text-center">
+                    {% buttons %}
+                    <a href="{% url 'avaliacao' empresa.id %}" type="submit" class="btn btn-success">Avaliar</a>
+                    {% endbuttons %}
+                </td>
+                <td class="text-center">
+                    {% buttons %}
+                    <a href="{% url 'empresa_delete' empresa.id %}" type="submit" class="btn btn-danger">Excluir</a>
+                    {% endbuttons %}
+                </td>
+
+                <td class="text-center">
+                    {% buttons %}
+                    <a href="{% url 'empresa_update' empresa.id %}" type="submit" class="btn btn-warning">Editar</a>
+                    {% endbuttons %}
+                </td>
+                <td class="text-center">
+                    {% buttons %}
+                    <a href="{% url 'relatorio' empresa.id %}" type="submit" class="btn btn-info">Relatorio</a>
+                    {% endbuttons %}
+                </td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+</div>
+
+{% endblock %}
