@@ -16,6 +16,13 @@
 
 
             <style>
+                :root {
+            --primary-orange: #FF6B35;
+            --dark-blue: #1A237E;
+            --light-orange: #FFA063;
+            --background-color: #F4F7F6;
+            --gray-text: #666;
+            }
                 .title-heading h1 {
                     color: #1a237e !important;
                     font-weight: bold;
@@ -26,12 +33,6 @@
                     color: #1a237e;
                     font-weight: 600;
                 }
-
-
-
-
-
-
 
                 .form input,
                 .form select,
@@ -54,15 +55,44 @@
                     background-color: #ff5722 !important;
                     border-color: #ff5722 !important;
                     color: white;
-                    padding: 10px 24px;
+                    padding: 0.75rem 2rem;
                     font-weight: 600;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
                     transition: all 0.3s ease;
+                    margin-top: 1rem;
+                }
+                .teste{
+                    margin: auto;
+                    display: flex;  
+                    justify-content: space-between;
+                    width: 100%;
+                    flex-wrap:wrap; 
                 }
 
                 .btn-primary:hover {
                     background-color: #f4511e !important;
                     border-color: #f4511e !important;
                     transform: translateY(-2px);
+                }
+
+                .btn-secondary {
+                    background-color: var(--dark-blue) !important;
+                    border-color: var(--dark-blue) !important;
+                    color: white;
+                    padding: 0.75rem 2rem;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    transition: all 0.3s ease;
+                    margin-top: 1rem;
+                }
+
+                .btn-secondary:hover {
+                    background-color: #273469 !important;
+                    border-color: #273469 !important;
+                    transform: translateY(-3px);
+                    box-shadow: 0 4px 10px rgba(26, 35, 126, 0.3);
                 }
 
                 .container {
@@ -73,6 +103,24 @@
                 /* Estilo para mensagens de erro do formulário */
                 .invalid-feedback {
                     color: #ff5722;
+                }
+                @media (max-width: 768px) {
+                    .teste {
+                        flex-direction: column; /* Empilha os botões */
+                        align-items: stretch; /* Faz os botões ocuparem a largura total */
+                    }
+                    
+                    .btn-primary, .btn-secondary {
+                        width: 100%; /* Largura total em telas pequenas */
+                    }
+                }
+
+                /* Media query para telas muito pequenas */
+                @media (max-width: 480px) {
+                    .btn-primary, .btn-secondary {
+                        padding: 0.5rem 1rem; /* Reduz o padding em telas muito pequenas */
+                        font-size: 0.9rem; /* Reduz o tamanho da fonte */
+                    }
                 }
             </style>
 
@@ -88,17 +136,26 @@
                                 {% bootstrap_form form %}
 
 
-                                {% buttons %}
-                                <button type="submit" class="btn btn-primary">Enviar Formulario</button>
-                                {% endbuttons %}
+                                <div class = "teste">
+                                    
+                    
+                                        <button type="submit" name="botao" class="btn btn-primary" value="relatorio">Enviar Formulario</button>
+                                    
+                                        <button type="submit" name="botao" class="btn btn-secondary" value="salvar">Salvar Formulario</button> 
+                                    
+                                </div>
+                            
                             </form>
+                            
                         </div>
+
                         <div class="col"></div>
                     </div>
+                    
 
                 </div>
             </div>
-        </div>
+            
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 const form = document.querySelector('form');
@@ -110,50 +167,50 @@
                     'id_questao2',
                     'id_questao3'
                 ]
-                function disableAllDescricao(){
+                function disableAllDescricao() {
                     const formElements = form.elements;
                     for (let i = 0; i < formElements.length; i++) {
                         const element = formElements[i];
-                        if (element.id.includes("descricao")){
+                        if (element.id.includes("descricao")) {
                             element.disabled = true
                         }
                     }
                 }
-                function disableDescricao(campo){
-                    campo_descricao = document.getElementById(campo.id+"_descricao")
+                function disableDescricao(campo) {
+                    campo_descricao = document.getElementById(campo.id + "_descricao")
                     campo_descricao.value = ""
                     campo_descricao.disabled = true
 
-                    
-                    
+
+
 
                 }
-                function enableDescricao(campo){
-                    
-                        campo_descricao = document.getElementById(campo.id+"_descricao")
-                        campo_descricao.required = true
-                        campo_descricao.disabled = false
+                function enableDescricao(campo) {
 
-                    
-                    
+                    campo_descricao = document.getElementById(campo.id + "_descricao")
+                    campo_descricao.required = true
+                    campo_descricao.disabled = false
+
+
+
                 }
-                function controllerDescricao(event){
+                function controllerDescricao(event) {
                     campo = event.target
-                    if (campo.value == "IN"){
+                    if (campo.value == "IN") {
                         enableDescricao(campo)
                     }
-                    else{
+                    else {
                         disableDescricao(campo)
                     }
 
                 }
                 function disableForm(id) {
                     const formElements = form.elements;
-                    
+
 
                     for (let i = 0; i < formElements.length; i++) {
                         const element = formElements[i];
-                        if (questionsToCheck.includes(element.id) || id+"_descricao" == element.id ) {
+                        if (questionsToCheck.includes(element.id) || id + "_descricao" == element.id) {
                             continue;
                         }
                         element.disabled = true;
@@ -170,7 +227,7 @@
                     for (let i = 0; i < formElements.length; i++) {
                         const element = formElements[i];
 
-                        
+
                         element.disabled = false;
 
                         if (element.tagName === 'SELECT') {
@@ -181,27 +238,27 @@
                 }
 
                 function update_tudo(event) {
-                        console.log('Selected value1:', event.target);
-                        teste = event.target;
-                        if (teste.value === 'IN') {
-                            disableForm(event.target.id);
-                        } else {
-                            enableForm();
-                        }
+                    console.log('Selected value1:', event.target);
+                    teste = event.target;
+                    if (teste.value === 'IN') {
+                        disableForm(event.target.id);
+                    } else {
+                        enableForm();
                     }
+                }
                 disableAllDescricao();
                 const formElements = form.elements;
                 for (let i = 0; i < formElements.length; i++) {
                     element = formElements[i];
-                    if (!element.id.includes("descricao")&& !questionsToCheck.includes(element.id)){
-                        element.addEventListener('change',controllerDescricao)
+                    if (!element.id.includes("descricao") && !questionsToCheck.includes(element.id)) {
+                        element.addEventListener('change', controllerDescricao)
                     }
                 }
                 question.addEventListener('change', update_tudo);
                 question2.addEventListener('change', update_tudo);
                 question3.addEventListener('change', update_tudo);
-                 
-                
+
+
 
             })
 

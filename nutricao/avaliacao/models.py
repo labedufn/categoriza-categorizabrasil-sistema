@@ -67,7 +67,7 @@ class Formulario(models.Model):
     "51 Possui implementado o Manual de Boas Práticas e os Procedimentos Operacionais Padronizados."
     ]
         
-
+    pode_gerar_relatorio = False
     Empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, null=False,blank=False)
     date = models.DateTimeField(auto_now_add=True, blank=True)
     Usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,null=False,blank=False)

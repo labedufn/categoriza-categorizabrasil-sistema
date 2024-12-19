@@ -88,16 +88,17 @@ def classificar_pontuacao(form):
         print("teste3: ",str(pontuacoes[0]))
         return str(pontuacoes[0]), classificacao,lista_somas
 @login_required(login_url="/login")
-def avaliacao_update(request,formulario_existente,empresa):
+def avaliacao_update(request,formulario_existente,empresa,sem_relatorio):
     if request.method == 'POST':
         form = FormularioAvaliacao(request.POST, instance=formulario_existente)
-        if form.is_valid():
-            
+        if form.is_valid() or sem_relatorio == True:
             formulario = form.save(commit=False)
             formulario.Usuario = request.user
             formulario.total_pontuacao, empresa.classificacao,lista_somas = classificar_pontuacao(form)
             formulario = salvar_pontuacoes(lista_somas,formulario)
             if request.user.tipo_usuario == "VIGILANCIA":
+                if sem_relatorio == False:
+                    formulario.pode_gerar_relatorio = True
                 empresa.save()
                 formulario.save()
             print("teste: ",formulario.total_pontuacao)
@@ -108,16 +109,18 @@ def avaliacao_update(request,formulario_existente,empresa):
     return render(request, 'avaliacao.html', {'form': form})
 
 @login_required(login_url="/login")
-def avaliacao_create(request,empresa):
+def avaliacao_create(request,empresa,sem_relatorio):
     if request.method == 'POST':
         form = FormularioAvaliacao(request.POST)
-        if form.is_valid():
+        if form.is_valid() or sem_relatorio == True:
             formulario = form.save(commit=False)
             formulario.Empresa = empresa
             formulario.Usuario = request.user
             formulario.total_pontuacao, empresa.classificacao,lista_somas = classificar_pontuacao(form)
             formulario = salvar_pontuacoes(lista_somas,formulario)
             if request.user.tipo_usuario == "VIGILANCIA":
+                if sem_relatorio == False:
+                    formulario.pode_gerar_relatorio = True
                 empresa.save()
                 formulario.save()
             formulario.save(commit = False)
@@ -129,14 +132,32 @@ def avaliacao_create(request,empresa):
     
     return render(request, "avaliacao.html", {'form': form})
 
+def verificaBotao(request):
+     if request.method == 'POST':
+        botao = request.POST.get('botao')  
+        nome = request.POST.get('nome')
+        return botao
+     return "get"
+def salvarForm(request,empresa):
+    sem_relatorio = True
+    try:
+        formulario_existente = Formulario.objects.get(Empresa=empresa)
+        return avaliacao_update(request=request, formulario_existente=formulario_existente,empresa=empresa,sem_relatorio=sem_relatorio)
+    except Formulario.DoesNotExist:
+        return avaliacao_create(request=request,empresa=empresa,sem_relatorio=sem_relatorio)
 @login_required(login_url="/login")
 def avaliacao(request, id):
     empresa = get_object_or_404(Empresa, id=id)
-    try:
-        formulario_existente = Formulario.objects.get(Empresa=empresa)
-        return avaliacao_update(request=request, formulario_existente=formulario_existente,empresa=empresa)
-    except Formulario.DoesNotExist:
-        return avaliacao_create(request=request,empresa=empresa)
+    resposta = verificaBotao(request)
+    if resposta == "salvar":
+        salvarForm(request,empresa)
+    else:
+        sem_relatorio = False
+        try:
+            formulario_existente = Formulario.objects.get(Empresa=empresa)
+            return avaliacao_update(request=request, formulario_existente=formulario_existente,empresa=empresa,sem_relatorio=sem_relatorio)
+        except Formulario.DoesNotExist:
+            return avaliacao_create(request=request,empresa=empresa,sem_relatorio=sem_relatorio)
         
 
     
