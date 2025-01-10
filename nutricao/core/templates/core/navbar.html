@@ -160,8 +160,10 @@
         document.addEventListener('DOMContentLoaded', function () {
         var tipoUsuario = "{{ request.user.tipo_usuario }}";
         if (tipoUsuario!="ADM" && tipoUsuario != "PREFEITURA"){
-            li = document.getElementById("cadastros")
-            li.remove();
+            let itens = Array.from(document.querySelectorAll('.dropdown-item'))
+            let item = itens.find(x => x.textContent.trim() === 'Usuario')
+            item.remove();
+            console.log(itens)
         }
         })
     </script>

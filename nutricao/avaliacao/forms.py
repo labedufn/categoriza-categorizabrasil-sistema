@@ -7,6 +7,8 @@ class CustomRadioSelect(forms.RadioSelect):
         template_name = 'custom_radio.html'
 
 class FormularioAvaliacao(forms.ModelForm):
+
+    pode_gerar_relatorio = False
     valor_questoes = ["eliminatorio","eliminatorio","eliminatorio",1,1,2,1,12,2,12,12,3,6,3,3,2,4,2,3,9,3,6,2,2,4,8,16,2,12,9,8,12,8,12,16,12,12,12,6,16,8,8,12,8,12,16,6,6,4,"classificatorio","classificatorio"]
     lista_requisitos = [
     "1. Utiliza-se exclusivamente água potável para manipulação de alimentos (água de abastecimento público ou solução alternativa com potabilidade atestada semestralmente por meio de laudos laboratoriais).",
@@ -90,5 +92,6 @@ class FormularioAvaliacao(forms.ModelForm):
                   'questao49', 'questao49_descricao','questao50','questao50_descricao',
                   'questao51','questao51_descricao',
                   ]
+    
 
    

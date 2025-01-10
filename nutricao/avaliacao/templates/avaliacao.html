@@ -1,11 +1,21 @@
 {% extends 'core/base.html' %}
-
 {% load static %}
 {% load bootstrap5 %}
 {% block title %}{% endblock %}
 
 {% block content %}
+{% if messages %}
+<div class="container mt-3">
+    {% for message in messages %}
+    <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
 <div class="container card w-100">
+
     <div class="card-body">
 
         <div>
@@ -17,12 +27,13 @@
 
             <style>
                 :root {
-            --primary-orange: #FF6B35;
-            --dark-blue: #1A237E;
-            --light-orange: #FFA063;
-            --background-color: #F4F7F6;
-            --gray-text: #666;
-            }
+                    --primary-orange: #FF6B35;
+                    --dark-blue: #1A237E;
+                    --light-orange: #FFA063;
+                    --background-color: #F4F7F6;
+                    --gray-text: #666;
+                }
+
                 .title-heading h1 {
                     color: #1a237e !important;
                     font-weight: bold;
@@ -62,19 +73,28 @@
                     transition: all 0.3s ease;
                     margin-top: 1rem;
                 }
-                .teste{
-                    margin: auto;
-                    display: flex;  
-                    justify-content: space-between;
-                    width: 100%;
-                    flex-wrap:wrap; 
+
+                .btn-primary:focus {
+                    outline: none !important;
+                    box-shadow: none !important;
                 }
 
                 .btn-primary:hover {
                     background-color: #f4511e !important;
                     border-color: #f4511e !important;
                     transform: translateY(-2px);
+                    box-shadow: 0 4px 12px rgba(244, 81, 30, 0.2);
                 }
+
+                .teste {
+                    margin: auto;
+                    display: flex;
+                    justify-content: space-between;
+                    width: 100%;
+                    flex-wrap: wrap;
+                }
+
+
 
                 .btn-secondary {
                     background-color: var(--dark-blue) !important;
@@ -86,6 +106,11 @@
                     letter-spacing: 1px;
                     transition: all 0.3s ease;
                     margin-top: 1rem;
+                }
+
+                .btn-secondary:focus {
+                    outline: none !important;
+                    box-shadow: 0 4px 12px rgba(244, 81, 30, 0.2) !important;
                 }
 
                 .btn-secondary:hover {
@@ -104,22 +129,31 @@
                 .invalid-feedback {
                     color: #ff5722;
                 }
+
                 @media (max-width: 768px) {
                     .teste {
-                        flex-direction: column; /* Empilha os botões */
-                        align-items: stretch; /* Faz os botões ocuparem a largura total */
+                        flex-direction: column;
+                        /* Empilha os botões */
+                        align-items: stretch;
+                        /* Faz os botões ocuparem a largura total */
                     }
-                    
-                    .btn-primary, .btn-secondary {
-                        width: 100%; /* Largura total em telas pequenas */
+
+                    .btn-primary,
+                    .btn-secondary {
+                        width: 100%;
+                        /* Largura total em telas pequenas */
                     }
                 }
 
                 /* Media query para telas muito pequenas */
                 @media (max-width: 480px) {
-                    .btn-primary, .btn-secondary {
-                        padding: 0.5rem 1rem; /* Reduz o padding em telas muito pequenas */
-                        font-size: 0.9rem; /* Reduz o tamanho da fonte */
+
+                    .btn-primary,
+                    .btn-secondary {
+                        padding: 0.5rem 1rem;
+                        /* Reduz o padding em telas muito pequenas */
+                        font-size: 0.9rem;
+                        /* Reduz o tamanho da fonte */
                     }
                 }
             </style>
@@ -136,133 +170,158 @@
                                 {% bootstrap_form form %}
 
 
-                                <div class = "teste">
-                                    
-                    
-                                        <button type="submit" name="botao" class="btn btn-primary" value="relatorio">Enviar Formulario</button>
-                                    
-                                        <button type="submit" name="botao" class="btn btn-secondary" value="salvar">Salvar Formulario</button> 
-                                    
+                                <div class="teste">
+
+
+                                    <button type="button" name="botao" class="btn btn-primary" id="botao_relatorio"
+                                        data-empresa_id="{{ empresa_id }}"> Enviar Formulario</button>
+
+                                    <button type="submit" name="botao" class="btn btn-secondary" value="salvar">Salvar
+                                        Formulario</button>
+
                                 </div>
-                            
+
+
                             </form>
-                            
+
                         </div>
 
                         <div class="col"></div>
                     </div>
-                    
+
 
                 </div>
             </div>
-            
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const form = document.querySelector('form');
-                const question = document.getElementById('id_questao1');
-                const question2 = document.getElementById('id_questao2');
-                const question3 = document.getElementById('id_questao3');
-                const questionsToCheck = [
-                    'id_questao1',
-                    'id_questao2',
-                    'id_questao3'
-                ]
-                function disableAllDescricao() {
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const form = document.querySelector('form');
+                    const empresa_id = document.getElementById('botao_relatorio').dataset.empresa_id
+                    const question = document.getElementById('id_questao1');
+                    const question2 = document.getElementById('id_questao2');
+                    const question3 = document.getElementById('id_questao3');
+                    const questionsToCheck = [
+                        'id_questao1',
+                        'id_questao2',
+                        'id_questao3'
+                    ]
+                    function disableAllDescricao() {
+                        const formElements = form.elements;
+                        for (let i = 0; i < formElements.length; i++) {
+                            const element = formElements[i];
+                            if (element.id.includes("descricao")) {
+                                element.disabled = true
+                            }
+                        }
+                    }
+                    function disableDescricao(campo) {
+                        campo_descricao = document.getElementById(campo.id + "_descricao")
+                        campo_descricao.value = ""
+                        campo_descricao.disabled = true
+
+
+
+
+                    }
+                    function enableDescricao(campo) {
+
+                        campo_descricao = document.getElementById(campo.id + "_descricao")
+                        campo_descricao.required = true
+                        campo_descricao.disabled = false
+
+
+
+                    }
+                    function controllerDescricao(event) {
+                        campo = event.target
+                        if (campo.value == "IN") {
+                            enableDescricao(campo)
+                        }
+                        else {
+                            disableDescricao(campo)
+                        }
+
+                    }
+                    function disableForm(id) {
+                        const formElements = form.elements;
+
+
+                        for (let i = 0; i < formElements.length; i++) {
+                            const element = formElements[i];
+                            if (questionsToCheck.includes(element.id) || id + "_descricao" == element.id) {
+                                continue;
+                            }
+                            element.disabled = true;
+                            if (element.tagName === 'SELECT') {
+                                element.style.backgroundColor = '#f0f0f0';
+                                element.style.cursor = 'not-allowed';
+                            }
+                        }
+                    }
+
+                    function enableForm() {
+                        const formElements = form.elements;
+
+                        for (let i = 0; i < formElements.length; i++) {
+                            const element = formElements[i];
+
+
+                            element.disabled = false;
+
+                            if (element.tagName === 'SELECT') {
+                                element.style.backgroundColor = '';
+                                element.style.cursor = '';
+                            }
+                        }
+                    }
+
+                    function update_tudo(event) {
+                        console.log('Selected value1:', event.target);
+                        teste = event.target;
+                        if (teste.value === 'IN') {
+                            disableForm(event.target.id);
+                        } else {
+                            enableForm();
+                        }
+                    }
+                    function req_para_relatorio(id) {
+                        console.log("teste2:" + id)
+                        const url = `/empresa/relatorio/${id}/`;
+
+                        fetch(url, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRFToken': "{{ csrf_token }}",
+                            },
+                        }).then(response => {
+                                if (response.ok) {
+                                    location.reload(); // Recarrega a página após sucesso
+                                } else {
+                                    alert('Ocorreu um erro ao atualizar.');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Erro:', error);
+                            });
+                    }
+                    disableAllDescricao();
                     const formElements = form.elements;
                     for (let i = 0; i < formElements.length; i++) {
-                        const element = formElements[i];
-                        if (element.id.includes("descricao")) {
-                            element.disabled = true
+                        element = formElements[i];
+                        if (!element.id.includes("descricao") && !questionsToCheck.includes(element.id)) {
+                            element.addEventListener('change', controllerDescricao)
                         }
                     }
-                }
-                function disableDescricao(campo) {
-                    campo_descricao = document.getElementById(campo.id + "_descricao")
-                    campo_descricao.value = ""
-                    campo_descricao.disabled = true
+                    question.addEventListener('change', update_tudo);
+                    question2.addEventListener('change', update_tudo);
+                    question3.addEventListener('change', update_tudo);
+                    botao_relatorio.addEventListener('click', () => req_para_relatorio(empresa_id))
 
 
 
+                })
 
-                }
-                function enableDescricao(campo) {
+            </script>
+        </div>
 
-                    campo_descricao = document.getElementById(campo.id + "_descricao")
-                    campo_descricao.required = true
-                    campo_descricao.disabled = false
-
-
-
-                }
-                function controllerDescricao(event) {
-                    campo = event.target
-                    if (campo.value == "IN") {
-                        enableDescricao(campo)
-                    }
-                    else {
-                        disableDescricao(campo)
-                    }
-
-                }
-                function disableForm(id) {
-                    const formElements = form.elements;
-
-
-                    for (let i = 0; i < formElements.length; i++) {
-                        const element = formElements[i];
-                        if (questionsToCheck.includes(element.id) || id + "_descricao" == element.id) {
-                            continue;
-                        }
-                        element.disabled = true;
-                        if (element.tagName === 'SELECT') {
-                            element.style.backgroundColor = '#f0f0f0';
-                            element.style.cursor = 'not-allowed';
-                        }
-                    }
-                }
-
-                function enableForm() {
-                    const formElements = form.elements;
-
-                    for (let i = 0; i < formElements.length; i++) {
-                        const element = formElements[i];
-
-
-                        element.disabled = false;
-
-                        if (element.tagName === 'SELECT') {
-                            element.style.backgroundColor = '';
-                            element.style.cursor = '';
-                        }
-                    }
-                }
-
-                function update_tudo(event) {
-                    console.log('Selected value1:', event.target);
-                    teste = event.target;
-                    if (teste.value === 'IN') {
-                        disableForm(event.target.id);
-                    } else {
-                        enableForm();
-                    }
-                }
-                disableAllDescricao();
-                const formElements = form.elements;
-                for (let i = 0; i < formElements.length; i++) {
-                    element = formElements[i];
-                    if (!element.id.includes("descricao") && !questionsToCheck.includes(element.id)) {
-                        element.addEventListener('change', controllerDescricao)
-                    }
-                }
-                question.addEventListener('change', update_tudo);
-                question2.addEventListener('change', update_tudo);
-                question3.addEventListener('change', update_tudo);
-
-
-
-            })
-
-        </script>
-    </div>
-
-    {% endblock %}
+        {% endblock %}
