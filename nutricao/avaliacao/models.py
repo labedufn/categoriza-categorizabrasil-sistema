@@ -80,7 +80,7 @@ class Formulario(models.Model):
     pt_materias_primas = models.TextField(default="")
     pt_preparo_alimento = models.TextField(default="")
     pt_armazenamento = models.TextField(default="")
-
+    classificacao = models.TextField(default="Não possui classificação")
         
 
 

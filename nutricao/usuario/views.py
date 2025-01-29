@@ -4,7 +4,7 @@ from django.views.generic import ListView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse
 from .models import User
-from .form import RegisterAdminForm, RegisterForm
+from .form import RegisterAdminForm, RegisterForm, CustomUserChangeForm
 from django.contrib.auth import login, logout, authenticate
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -129,34 +129,41 @@ class CustomLogoutView(LogoutView):
 @login_required(login_url="/login")
 def usuario_update(request, id):
     user = get_object_or_404(User, pk=id)
-    
-    if request.method == "POST":
-        form = UserChangeForm(request.POST, instance=user)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Usuário atualizado com sucesso!')
-            return redirect('home')
+    if request.user.tipo_usuario == "ADM":
+        if request.method == "POST":
+            form = CustomUserChangeForm(request.POST, instance=user)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Usuário atualizado com sucesso!')
+                return redirect('home')
+        else:
+            form = CustomUserChangeForm(instance=user)
+        
+        return render(request, "usuario_update.html", {'form': form, 'user': user})
     else:
-        form = UserChangeForm(instance=user)
+        return redirect("home")
+
     
-    return render(request, "usuario_update.html", {'form': form, 'user': user})
 
 @login_required(login_url="/login")
 def usuario_delete(request, id):
     # Busca o usuário existente ou retorna 404
     user = get_object_or_404(User, pk=id)
-    
-    if request.method == "POST":
-        # Confirma a exclusão
-        user.delete()
-        messages.success(request, 'Usuário excluído com sucesso!')
-        return redirect('home')
-    
-    # Renderiza a página de confirmação de exclusão
-    return render(request, "user_delete.html", {'user': user})
-
+    if request.user.tipo_usuario == "ADM":
+        if request.method == "POST":
+            # Confirma a exclusão
+            user.delete()
+            messages.success(request, 'Usuário excluído com sucesso!')
+            return redirect('home')
+        
+        # Renderiza a página de confirmação de exclusão
+        return render(request, "user_delete.html", {'user': user})
+    else:
+        return redirect("home")
 
 
 def logout_view(request):
     logout(request)
     return redirect('cadastro')
+
+

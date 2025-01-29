@@ -1,6 +1,7 @@
 {% extends 'core/base.html' %}
 {% load static %}
 {% load bootstrap5 %}
+{% load filtros_empresa %}
 
 {% block title %}{% endblock %}
 {% block content %}
@@ -139,25 +140,29 @@
             </tr>
         </thead>
         <tbody>
-            {% for empresa in object_list %}
+            {% for empresa in empresas %}
+            {% with formulario=formularios|dict_get:empresa.id %}
             <tr>
                 <td class="text-center">{{empresa.cnpj}}</td>
                 <td class="text-center">{{empresa.nome_fantasia}}</td>
                 <td class="text-center">{{empresa.endereco}}</td>
                 <td class="text-center">{{empresa.bairro}}</td>
                 <td class="text-center">
-                    {% if empresa.classificacao == 'A' %}
+                    {% if formulario.classificacao == 'A' %}
                     <img src="{% static 'core/img/A_PNG_.png' %}" alt="Classificação A"
                         class="imagem-classificacao">
-                    {% elif empresa.classificacao == 'B' %}
+                    {% elif formulario.classificacao == 'B' %}
                     <img src="{% static 'core/img/B_PNG_.png' %}" alt="Classificação B"
                         class="imagem-classificacao">
-                    {% elif empresa.classificacao == 'C' %}
+                    {% elif formulario.classificacao == 'C' %}
                     <img src="{% static 'core/img/c_PNG_.png' %}" alt="Classificação C"
                         class="imagem-classificacao">
-                    {% else %}
+                    {% elif formulario.classificacao == 'PENDENTE' %}
                         {{empresa.classificacao}}
+                    {% else %}
+                        NÃO POSSUI CLASSIFICAÇÃO
                     {% endif %}
+                    
                 </td>
 
                 <td class="text-center">
@@ -183,6 +188,7 @@
                 </td>
 
             </tr>
+            {% endwith %}
             {% endfor %}
         </tbody>
 

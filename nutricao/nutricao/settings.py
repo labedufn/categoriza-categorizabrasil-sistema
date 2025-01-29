@@ -69,8 +69,12 @@ ROOT_URLCONF = 'nutricao.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
+        'DIRS': [
+            os.path.join(BASE_DIR, 'core/templates'),
+            os.path.join(BASE_DIR, 'usuario/templates'),
+            os.path.join(BASE_DIR, 'empresa/templates'),
+            os.path.join(BASE_DIR, 'avaliacao/templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -150,5 +154,12 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 AUTH_USER_MODEL = 'usuario.User'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # ou seu servidor SMTP
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'categorizabrazil@gmail.com'
+EMAIL_HOST_PASSWORD = 'nysp lijg ufuy oawz' 
 
 

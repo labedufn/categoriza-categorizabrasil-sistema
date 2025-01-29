@@ -27,7 +27,6 @@ def soma_dict(dict, valor_questoes):
         if resposta[1] == 'IN':
             questao = resposta[0]
             idx = int(questao[7:])
-            print("teste:   ",valor_questoes[idx-1])
             total_pontuacao += valor_questoes[idx-1]
         contador+=1
     return total_pontuacao
@@ -114,11 +113,9 @@ def salvar_pontuacoes(lista_somas,form):
         form.pt_armazenamento = lista_somas[7]
         return form
 def classificar_pontuacao(form):
-        print("teste1")
         valor_questoes = ["eliminatorio","eliminatorio","eliminatorio",1,1,2,1,12,2,12,12,3,6,3,3,2,4,2,3,9,3,6,2,2,4,8,16,2,12,9,8,12,8,12,16,12,12,12,6,16,8,8,12,8,12,16,6,6,4,"classificatorio","classificatorio"]
         respostas = form.initial
         respostas = {chave: valor for chave, valor in respostas.items() if not chave.endswith("_descricao")}
-        print(form.initial)
         pontuacoes,lista_somas = calcular_pontuacao(valor_questoes,respostas)
                     
         if int(pontuacoes[0])>=156 or pontuacoes[1]== True or pontuacoes[2]== False:
@@ -130,11 +127,11 @@ def classificar_pontuacao(form):
         else:
             classificacao = "A"
         
-        return sum(pontuacoes), classificacao,lista_somas
+        return pontuacoes[0], classificacao,lista_somas
 def salvarForm(request, empresa):
     
     try:
-        formulario_existente = Formulario.objects.get(Empresa=empresa)
+        formulario_existente = Formulario.objects.get(Empresa=empresa, Usuario = request.user)
         return avaliacao_update(request=request, formulario_existente=formulario_existente, empresa=empresa)
     except Formulario.DoesNotExist:
         return avaliacao_create(request=request, empresa=empresa)
@@ -147,11 +144,11 @@ def avaliacao_update(request, formulario_existente, empresa):
             formulario = form.save(commit=False)
             formulario.Usuario = request.user
             
-            if request.user.tipo_usuario == "VIGILANCIA":
+            
                 
-                empresa.save()
-                formulario.save()
-                messages.success(request, "Os dados do formulario foram salvos!")
+            empresa.save()
+            formulario.save()
+            messages.success(request, "Os dados do formulario foram salvos!")
             return render(request, "avaliacao.html",{'form':form, 'empresa_id': empresa.id}) 
     
     else:
@@ -168,12 +165,8 @@ def avaliacao_create(request, empresa):
             formulario.Empresa = empresa
             formulario.Usuario = request.user
 
-            
-            if request.user.tipo_usuario == "VIGILANCIA":
-                
-                empresa.save()
-                formulario.save()
-                messages.success(request, "Os dados do formulario foram salvos!")
+            formulario.save()
+            messages.success(request, "Os dados do formulario foram salvos!")
             return render(request, "avaliacao.html",{'form':form, 'empresa_id': empresa.id}) 
         
        
@@ -185,12 +178,10 @@ def avaliacao_create(request, empresa):
 def avaliacao(request, id):
     empresa = get_object_or_404(Empresa, id=id)
     resposta = verificaBotao(request)
-    print("teste")
     if resposta == "salvar" or resposta == "get":
         
         return salvarForm(request, empresa)
     else:
-        print("teste")
         return redirect("empresa/relatorio")
 
     
@@ -201,7 +192,7 @@ def relatorio(request, id):
     empresa = get_object_or_404(Empresa, id=id)
     if request.method == 'POST':
         try:
-            formulario_existente = Formulario.objects.get(Empresa=empresa)
+            formulario_existente = Formulario.objects.get(Empresa=empresa, Usuario = request.user)
             form = FormularioAvaliacao(request.POST, instance=formulario_existente)
             
             if not form.is_valid():
@@ -215,13 +206,15 @@ def relatorio(request, id):
             formulario_existente.Usuario = request.user
             
             # Calcula e salva pontuações
-            formulario_existente.total_pontuacao, empresa.classificacao, lista_somas = classificar_pontuacao(form)
+            formulario_existente.total_pontuacao, formulario_existente.classificacao, lista_somas = classificar_pontuacao(form)
+           
             formulario_existente = salvar_pontuacoes(lista_somas, formulario_existente)
             formulario_existente.pode_gerar_relatorio = True
             
             # Salva as alterações
-            print(formulario_existente.total_pontuacao)
-            empresa.save()
+            if request.user.tipo_usuario == "VIGILANCIA":
+                empresa.classificacao = formulario_existente.classificacao
+                empresa.save()
             formulario_existente.save()
             messages.success(request, "Os dados do relatorio foram atualizados!")
             url = reverse('relatorio', kwargs={'id': id})
@@ -233,8 +226,7 @@ def relatorio(request, id):
     else:
         
         try:
-            formulario_existente = Formulario.objects.get(Empresa=empresa)
-            print("teste")
+            formulario_existente = Formulario.objects.get(Empresa=empresa, Usuario = request.user)
             return render(request, "relatorio.html", {
                 'form': formulario_existente,
                 'questoes_valor': formulario_existente.valor_questoes,

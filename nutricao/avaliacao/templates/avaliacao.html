@@ -86,7 +86,7 @@
                     box-shadow: 0 4px 12px rgba(244, 81, 30, 0.2);
                 }
 
-                .teste {
+                .botoes {
                     margin: auto;
                     display: flex;
                     justify-content: space-between;
@@ -170,7 +170,7 @@
                                 {% bootstrap_form form %}
 
 
-                                <div class="teste">
+                                <div class="botoes">
 
 
                                     <button type="button" name="botao" class="btn btn-primary" id="botao_relatorio"
@@ -205,6 +205,20 @@
                         'id_questao2',
                         'id_questao3'
                     ]
+
+                    const alerts = document.querySelectorAll('.alert');
+
+                    // Define o tempo (em milissegundos) para o alerta desaparecer
+                    const alertTimeout = 5000; // 5000ms = 5 segundos
+
+                    alerts.forEach(alert => {
+                        setTimeout(() => {
+                            // Remove o alerta depois de 5 segundos
+                            alert.classList.remove('show');
+                            alert.classList.add('fade');
+                            setTimeout(() => alert.remove(), 150); // Remove do DOM após a animação de fade
+                        }, alertTimeout);
+                    });
                     function disableAllDescricao() {
                         const formElements = form.elements;
                         for (let i = 0; i < formElements.length; i++) {
@@ -294,12 +308,12 @@
                                 'X-CSRFToken': "{{ csrf_token }}",
                             },
                         }).then(response => {
-                                if (response.ok) {
-                                    location.reload(); // Recarrega a página após sucesso
-                                } else {
-                                    alert('Ocorreu um erro ao atualizar.');
-                                }
-                            })
+                            if (response.ok) {
+                                location.reload(); // Recarrega a página após sucesso
+                            } else {
+                                alert('Ocorreu um erro ao atualizar.');
+                            }
+                        })
                             .catch(error => {
                                 console.error('Erro:', error);
                             });

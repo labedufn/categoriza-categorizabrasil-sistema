@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import User
+from django.contrib.auth.forms import UserChangeForm
 
 
 
@@ -70,3 +71,22 @@ class LoginForm(forms.Form):
         label='Senha',
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Sua senha'})
     )
+
+class CustomUserChangeForm(UserChangeForm):
+    class Meta:
+        TIPOS_USUARIO = [
+        ("VIGILANCIA", "Vigilância"),
+        ("PREFEITURA", "Prefeitura"),
+        ("ADM", "Administrador"),
+        ("OUTRO", "Outro")
+        ]
+
+        model = User
+        fields = ['nome', 'email',"tipo_usuario","cpf","password"]  # Removidos first_name e last_name
+        widgets = {
+            'nome': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'cpf':forms.TextInput(attrs={'class':'form-control'}),
+            'tipo_usuario':forms.Select(choices=TIPOS_USUARIO, attrs={'class':'form-control'}),
+            'password':forms.TextInput(attrs={'class':'form-control'})
+        }

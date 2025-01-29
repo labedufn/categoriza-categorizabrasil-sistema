@@ -10,7 +10,7 @@
 
 
 <style>
-    .title-heading h1{
+    .title-heading h1 {
         color: #1a237e;
         font-weight: bold;
         margin: 2rem 0;
@@ -71,23 +71,23 @@
 
     .btn-success {
         background-color: rgb(28, 255, 47) !important;
-        border-color:  rgb(28, 255, 47)!important;
+        border-color: rgb(28, 255, 47) !important;
         color: white;
     }
 
     .btn-success:hover {
-        background-color: rgb(0, 200, 0)!important;
+        background-color: rgb(0, 200, 0) !important;
         border-color: rgb(0, 200, 0) !important;
     }
 
     .btn-warning {
         background-color: rgb(240, 240, 0) !important;
-        border-color:  rgb(240, 240, 0)!important;
+        border-color: rgb(240, 240, 0) !important;
         color: white;
     }
 
     .btn-warning:hover {
-        background-color: rgb(200, 200, 0)!important;
+        background-color: rgb(200, 200, 0) !important;
         border-color: rgb(200, 200, 0) !important;
     }
 
@@ -124,29 +124,35 @@
                 <th scope="col" class="text-center">nome</th>
                 <th scope="col" class="text-center">tipo</th>
                 <th scope="col" class="text-center">cpf</th>
+                {% if request.user.tipo_usuario == "ADM" %}
                 <th class="text-center">Excluir</th>
                 <th class="text-center">Editar</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
-            {% for usuario in object_list  %}
+            {% for usuario in object_list %}
             <tr>
 
                 <td class="text-center">{{usuario.email}}</td>
                 <td class="text-center">{{usuario.nome}}</td>
                 <td class="text-center">{{usuario.tipo_usuario}}</td>
                 <td class="text-center">{{usuario.cpf}}</td>
+                {% if request.user.tipo_usuario == "ADM" %}
                 <td class="text-center">
                     {% buttons %}
-                    <a href="{% url 'usuario_delete' usuario.id %}" type="submit" class="btn btn-danger">Excluir</a>
+                    <a href="{% url 'usuario_delete' usuario.id %}" type="submit"
+                        class="btn btn-danger botao">Excluir</a>
                     {% endbuttons %}
                 </td>
 
                 <td class="text-center">
                     {% buttons %}
-                    <a href="{% url 'usuario_update' usuario.id %}" type="submit" class="btn btn-warning">Editar</a>
+                    <a href="{% url 'usuario_update' usuario.id %}" type="submit"
+                        class="btn btn-warning botao">Editar</a>
                     {% endbuttons %}
                 </td>
+                {% endif  %}
             </tr>
             {% endfor %}
         </tbody>

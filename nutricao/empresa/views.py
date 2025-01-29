@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from utils.decorators import LoginRequiredMixin
 from .models import Empresa
 from django.contrib import messages
+from avaliacao.models import Formulario
 
 @login_required(login_url="/login")
 def empresa_update(request, id):
@@ -60,3 +61,22 @@ class EmpresaList(LoginRequiredMixin, ListView):
     model = Empresa
     template_name = 'empresa_list.html' 
     login_url = '/login' 
+    context_object_name = 'empresas' 
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        empresas = context['empresas']  # Todas as empresas listadas
+        formularios = {}  # Dicionário para armazenar os formulários por empresa
+
+        for empresa in empresas:
+            try:
+                # Busca o formulário relacionado à empresa e ao usuário logado
+                formulario_existente = Formulario.objects.get(Empresa=empresa, Usuario=self.request.user)
+                formularios[empresa.id] = formulario_existente
+            except Formulario.DoesNotExist:
+                # Caso não exista um formulário, atribua `None` ou crie um formulário vazio
+                formularios[empresa.id] = None
+
+        # Adiciona o dicionário de formulários ao contexto
+        context['formularios'] = formularios
+        return context
