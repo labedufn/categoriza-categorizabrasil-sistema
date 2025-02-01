@@ -3,22 +3,17 @@ import os
 from dotenv import load_dotenv
 from django.contrib.messages import constants as messages
 
-# Carregar variáveis do .env
 load_dotenv()
 
-# Caminho base do projeto
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Segurança
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "chave-padrao-segura")
 DEBUG = os.getenv("DEBUG", "False") == "True"
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost").split(",")
 
-# Diretórios estáticos
 STATIC_ROOT = os.path.join(BASE_DIR, 'nutricao/static')
 STATIC_URL = '/static/'
 
-# Aplicações Django
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -33,7 +28,6 @@ INSTALLED_APPS = [
     'usuario.apps.UsuarioConfig',
 ]
 
-# Middlewares
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -44,7 +38,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# Mensagens
 MESSAGE_TAGS = {
     messages.DEBUG: 'alert-secondary',
     messages.INFO: 'alert-info',
@@ -53,10 +46,8 @@ MESSAGE_TAGS = {
     messages.ERROR: 'alert-danger',
 }
 
-# Configuração de URLs
 ROOT_URLCONF = 'nutricao.urls'
 
-# Templates
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -78,10 +69,8 @@ TEMPLATES = [
     },
 ]
 
-# WSGI
 WSGI_APPLICATION = 'nutricao.wsgi.application'
 
-# Configuração do Banco de Dados
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -93,7 +82,6 @@ DATABASES = {
     }
 }
 
-# Validações de senha
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -109,33 +97,31 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internacionalização
 LANGUAGE_CODE = 'pt-br'
 TIME_ZONE = 'America/Sao_Paulo'
 USE_I18N = True
 USE_TZ = True
 
-# Arquivos estáticos
 STATIC_URL = 'static/'
 
-# Tipo de chave primária padrão
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Configuração de login/logout
 LOGIN_URL = '/login'
 LOGOUT_REDIRECT_URL = '/login'
 LOGIN_REDIRECT_URL = 'home'
 
-# Autenticação
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 AUTH_USER_MODEL = 'usuario.User'
 
-# Configuração de Email
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+
+CSRF_TRUSTED_ORIGINS = [
+    os.getenv("ALLOWED_HOSTS", "localhost"),
+]
