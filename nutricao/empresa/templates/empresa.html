@@ -10,7 +10,7 @@
 
 {% block content %}
 <br>
-<div class="container card w-75">
+<div class="container card ">
     <div class="card-body">
         <br>
         <div class="text-center title-heading">
@@ -26,6 +26,10 @@
                 margin: 2rem 0;
                 text-transform: uppercase;
                 letter-spacing: 1px;
+            }
+
+            .card{
+                width: 75%;
             }
 
             .form-container {
@@ -58,6 +62,7 @@
                 color: #666;
                 font-size: 0.875rem;
             }
+
             .form-select {
                 border: 2px solid #e0e0e0 !important;
                 border-radius: 6px !important;
@@ -65,10 +70,12 @@
                 transition: all 0.3s ease !important;
                 font-size: 1rem !important;
             }
-            .form-select option:hover{
+
+            .form-select option:hover {
                 background-color: #1a237e !important;
                 color: white
             }
+
             .form-select:focus {
                 border-color: #1a237e !important;
                 box-shadow: 0 0 0 0.2rem rgba(26, 35, 126, 0.15) !important;
@@ -124,6 +131,12 @@
 
             /* Responsividade */
             @media (max-width: 768px) {
+                .card {
+                    width: 85% !important;
+                    /* Increase card width on smaller screens */
+                    margin: 0 auto;
+                    /* Center the card */
+                }
                 .form-container {
                     padding: 1.5rem;
                     margin: 1rem;
@@ -134,6 +147,42 @@
                     padding: 0.75rem 1rem;
                 }
             }
+
+            @media (max-width: 576px) {
+
+                small {
+                    display: none;
+                }
+
+                .form-container {
+                    padding: 1rem;
+                    margin: 0.5rem;
+                }
+
+                .title-heading {
+
+                    margin: 1rem 0;
+                }
+
+                .title-heading h1 {
+                    font-size: 1.2rem;
+                }
+
+                .btn-primary,
+                .btn-secondary {
+                    padding: 0.5rem 1rem;
+                    font-size: xx-small;
+                }
+
+                .form-control,
+                .form-select {
+                    padding: 0.5rem;
+                }
+
+
+
+            }
+
 
             /* Estilo para campos select */
             select.form-control {

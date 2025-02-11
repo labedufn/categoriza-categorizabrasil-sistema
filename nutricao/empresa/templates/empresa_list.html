@@ -66,8 +66,10 @@
         border-radius: 4px;
         transition: all 0.3s ease;
     }
+
     .imagem-classificacao {
-        width: 4rem;  /* ou o tamanho que desejar */
+        width: 4rem;
+        /* ou o tamanho que desejar */
         height: auto;
         /* outros estilos que desejar */
     }
@@ -133,8 +135,15 @@
                 <th scope="col" class="text-center">BAIRRO</th>
                 <th scope="col" class="text-center">CLASSIFICAÇÃO</th>
                 <th class="text-center">AVALIAR</th>
-                <th class="text-center">EXCLUIR</th>
-                <th class="text-center">EDITAR</th>
+                {% if request.user.tipo_usuario == "ADM" %}
+                    <th class="text-center">Excluir</th>
+                {% endif %}
+                {% if request.user.tipo_usuario == "ADM" or request.user.tipo_usuario == "VIGILANCIA" %}
+                    <th class="text-center">Editar</th>
+                {% endif %}
+
+
+
                 <th class="text-center">GERAR RELATORIO</th>
 
             </tr>
@@ -149,20 +158,17 @@
                 <td class="text-center">{{empresa.bairro}}</td>
                 <td class="text-center">
                     {% if formulario.classificacao == 'A' %}
-                    <img src="{% static 'core/img/A_PNG_.png' %}" alt="Classificação A"
-                        class="imagem-classificacao">
+                    <img src="{% static 'core/img/A_PNG_.png' %}" alt="Classificação A" class="imagem-classificacao">
                     {% elif formulario.classificacao == 'B' %}
-                    <img src="{% static 'core/img/B_PNG_.png' %}" alt="Classificação B"
-                        class="imagem-classificacao">
+                    <img src="{% static 'core/img/B_PNG_.png' %}" alt="Classificação B" class="imagem-classificacao">
                     {% elif formulario.classificacao == 'C' %}
-                    <img src="{% static 'core/img/c_PNG_.png' %}" alt="Classificação C"
-                        class="imagem-classificacao">
+                    <img src="{% static 'core/img/c_PNG_.png' %}" alt="Classificação C" class="imagem-classificacao">
                     {% elif formulario.classificacao == 'PENDENTE' %}
-                        {{empresa.classificacao}}
+                    {{empresa.classificacao}}
                     {% else %}
-                        NÃO POSSUI CLASSIFICAÇÃO
+                    NÃO POSSUI CLASSIFICAÇÃO
                     {% endif %}
-                    
+
                 </td>
 
                 <td class="text-center">
@@ -170,17 +176,26 @@
                     <a href="{% url 'avaliacao' empresa.id %}" type="submit" class="btn btn-success">Avaliar</a>
                     {% endbuttons %}
                 </td>
-                <td class="text-center">
-                    {% buttons %}
-                    <a href="{% url 'empresa_delete' empresa.id %}" type="submit" class="btn btn-danger">Excluir</a>
-                    {% endbuttons %}
-                </td>
+                {% if request.user.tipo_usuario == "ADM" %}
+                    <td class="text-center">
+                        {% buttons %}
+                        <a href="{% url 'usuario_delete' usuario.id %}" type="submit"
+                            class="btn btn-danger botao">Excluir</a>
+                        {% endbuttons %}
+                    </td>
+                {% endif %}
+
+                {% if request.user.tipo_usuario == "ADM" or request.user.tipo_usuario == "VIGILANCIA" %}
+
 
                 <td class="text-center">
                     {% buttons %}
-                    <a href="{% url 'empresa_update' empresa.id %}" type="submit" class="btn btn-warning">Editar</a>
+                    <a href="{% url 'usuario_update' usuario.id %}" type="submit"
+                        class="btn btn-warning botao">Editar</a>
                     {% endbuttons %}
                 </td>
+                {% endif %}
+
                 <td class="text-center">
                     {% buttons %}
                     <a href="{% url 'relatorio' empresa.id %}" type="submit" class="btn btn-info">Relatorio</a>

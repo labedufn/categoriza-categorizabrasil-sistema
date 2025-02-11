@@ -43,20 +43,26 @@
         margin: 2rem auto;
         border: 1px solid rgba(26, 35, 126, 0.1);
     }
+    .btn{
+        width: 40%;
+    }
 
     .confirmation-message {
         color: var(--dark-blue);
-        font-size: 1.1rem;
+        font-size: 1.5rem;
         text-align: center;
         margin-bottom: 2rem;
         font-weight: 500;
     }
 
-    .btn-container {
-        display: flex;
-        justify-content: center;
-        gap: 1rem;
-    }
+    .botoes{
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+                /* Add gap between buttons */
+                width: 100%;
+            }
 
     .btn-danger {
         background-color: var(--primary-orange) !important;
@@ -102,14 +108,50 @@
 
     /* Responsividade */
     @media (max-width: 768px) {
-        .btn-container {
+        .botoes{
             flex-direction: column;
         }
 
-        .btn-danger, .btn-secondary {
+        .btn-danger,
+        .btn-secondary {
             width: 100%;
             margin-bottom: 0.5rem;
         }
+    }
+
+    @media (max-width: 576px) {
+
+        small {
+            display: none;
+        }
+
+        .form-container {
+            padding: 1rem;
+            margin: 0.5rem;
+        }
+
+        .confirmation-message {
+
+            margin: 1rem 0;
+        }
+
+        .confirmation-message  {
+            font-size: 1.2rem;
+        }
+
+        .btn-danger,
+        .btn-secondary {
+            padding: 0.5rem 1rem;
+            font-size: xx-small;
+        }
+
+        .form-control,
+        .form-select {
+            padding: 0.5rem;
+        }
+
+
+
     }
 
     /* Animações */
@@ -118,6 +160,7 @@
             opacity: 0;
             transform: translateY(20px);
         }
+
         to {
             opacity: 1;
             transform: translateY(0);
@@ -132,11 +175,11 @@
 
 <div class="form-container">
     <p class="confirmation-message">Tem certeza que deseja excluir a empresa "{{ empresa.razao_social }}"?</p>
-    
+
     <form method="post">
         {% csrf_token %}
-        
-        <div class="btn-container">
+
+        <div class="botoes">
             <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
             <a href="{% url 'empresa_list' %}" class="btn btn-secondary">Cancelar</a>
         </div>

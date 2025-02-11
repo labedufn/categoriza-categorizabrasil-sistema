@@ -16,6 +16,9 @@
         background-color: var(--background-color);
     }
 
+    .btn{
+        width: 100%;
+    }
     .title-heading {
         color: var(--dark-blue);
         font-weight: bold;
@@ -68,6 +71,15 @@
         color: var(--gray-text);
         font-size: 0.875rem;
     }
+
+    .botoes{
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+                /* Add gap between buttons */
+                width: 100%;
+            }
 
     .btn-primary {
         background-color: var(--primary-orange) !important;
@@ -125,6 +137,7 @@
             opacity: 0;
             transform: translateY(20px);
         }
+
         to {
             opacity: 1;
             transform: translateY(0);
@@ -151,10 +164,46 @@
             margin: 1rem;
         }
 
-        .btn-primary, .btn-secondary {
+        .btn-primary,
+        .btn-secondary {
             width: 100%;
             margin-bottom: 0.5rem;
         }
+    }
+
+    @media (max-width: 576px) {
+
+        small {
+            display: none;
+        }
+
+        .form-container {
+            padding: 1rem;
+            margin: 0.5rem;
+        }
+
+        .title-heading {
+
+            margin: 1rem 0;
+        }
+
+        .title-heading h1 {
+            font-size: 1.2rem;
+        }
+
+        .btn-primary,
+        .btn-secondary {
+            padding: 0.5rem 1rem;
+            font-size: xx-small;
+        }
+
+        .form-control,
+        .form-select {
+            padding: 0.5rem;
+        }
+
+
+
     }
 </style>
 <div class="container">
@@ -171,7 +220,7 @@
                             <form method="post">
                                 {% csrf_token %}
                                 {% bootstrap_form form %}
-                                <div class="d-flex justify-content-between">
+                                <div class="botoes">
                                     <button type="submit" class="btn btn-primary">Atualizar</button>
                                     <a href="{% url 'empresa_list' %}" class="btn btn-secondary">Cancelar</a>
                                 </div>
@@ -183,4 +232,4 @@
             </div>
         </div>
     </div>
-{% endblock %}
+    {% endblock %}
