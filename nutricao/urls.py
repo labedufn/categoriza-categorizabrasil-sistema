@@ -16,13 +16,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic.base import RedirectView
+from django.urls import path, reverse_lazy
+from django.shortcuts import redirect
 
 urlpatterns = [
+    path('', RedirectView.as_view(url=reverse_lazy('login'))),
     path('admin/', admin.site.urls),
     path('avaliacao/', include("avaliacao.urls")),
     path('empresa/', include("empresa.urls")),
     path("",include('django.contrib.auth.urls')),
     path("cadastro/",include("usuario.urls")),
 
-    
 ]

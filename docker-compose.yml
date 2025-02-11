@@ -1,0 +1,28 @@
+services:
+  db:
+    image: postgres:14.5-alpine
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+
+  web:
+    build: .
+    command: sh -c "/wait-for-db.sh && python manage.py migrate && python manage.py runserver 0.0.0.0:8001"
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    ports:
+      - "8001:8001"
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
