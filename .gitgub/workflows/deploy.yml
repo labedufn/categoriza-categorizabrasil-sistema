@@ -1,10 +1,9 @@
-name: Deploy Coolify - Categoriza
+name: Deploy - Categoriza
 
 on:
   push:
     branches:
       - main
-      - homologa
 
 jobs:
   deploy:
@@ -14,17 +13,11 @@ jobs:
       - name: Checkout do Código
         uses: actions/checkout@v3
 
-      - name: Deploy para Coolify
+      - name: Deploy
         env:
           COOLIFY_API_KEY: ${{ secrets.COOLIFY_API_KEY }}
           COOLIFY_APP_ID_MAIN: ${{ secrets.COOLIFY_APP_ID_MAIN }}
-          COOLIFY_APP_ID_HOMOLOGA: ${{ secrets.COOLIFY_APP_ID_HOMOLOGA }}
           COOLIFY_URL: ${{ secrets.COOLIFY_URL }}
         run: |
-          if [[ "${{ github.ref_name }}" == "main" ]]; then
-            curl -X POST "${{ env.COOLIFY_URL }}/api/v1/deploy/${{ env.COOLIFY_APP_ID_MAIN }}" \
-              -H "Authorization: Bearer ${{ env.COOLIFY_API_KEY }}"
-          elif [[ "${{ github.ref_name }}" == "homologa" ]]; then
-            curl -X POST "${{ env.COOLIFY_URL }}/api/v1/deploy/${{ env.COOLIFY_APP_ID_HOMOLOGA }}" \
-              -H "Authorization: Bearer ${{ env.COOLIFY_API_KEY }}"
-          fi
+          curl -X POST "${{ env.COOLIFY_URL }}/api/v1/deploy/${{ env.COOLIFY_APP_ID_MAIN }}" \
+            -H "Authorization: Bearer ${{ env.COOLIFY_API_KEY }}"
