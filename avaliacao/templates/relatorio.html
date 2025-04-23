@@ -331,5 +331,135 @@
                     </div>
                 </div>
             </div>
-           
+            <style>
+                :root {
+                    --dark-blue: #003963;
+                    --dark-blue-hover: #121858;
+                    --orange: #003963;
+                    --orange-light: rgba(255, 87, 34, 0.1);
+                    --text-dark: #2c3345;
+                    --light-gray: #f4f5f7;
+                }
+
+
+                body {
+                    background-color: var(--light-gray);
+                    font-family: 'Inter', 'Roboto', sans-serif;
+                }
+
+
+                .imagem-classificacao {
+                    width: 30rem;
+                    /* ou o tamanho que desejar */
+                    height: auto;
+                    /* outros estilos que desejar */
+                }
+
+
+                .report-wrapper {
+                    background-color: transparent;
+                }
+
+                .report-card {
+                    border: none;
+                    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1) !important;
+                }
+
+                .card-header.bg-dark-blue {
+                    background: linear-gradient(135deg, var(--dark-blue), var(--dark-blue-hover)) !important;
+                    position: relative;
+                    border-bottom: 3px solid var(--orange);
+
+                }
+
+                .header-accent {
+                    position: absolute;
+                    bottom: -3px;
+                    left: 0;
+                    right: 0;
+                    height: 5px;
+                    background: var(--orange);
+                }
+
+                .text-orange {
+                    color: var(--orange) !important;
+                }
+
+                .text-white {
+                    color: var(--light-gray) !important;
+                }
+
+                .text-dark-blue {
+                    color: var(--dark-blue) !important;
+                }
+
+                .text-dark {
+                    color: var(--text-dark);
+                }
+
+                .bg-orange-light {
+                    background-color: var(--orange-light) !important;
+                }
+
+                .evaluation-item {
+                    transition: all 0.3s ease;
+                    border: 1px solid rgba(26, 35, 126, 0.1);
+                }
+
+                .evaluation-item:hover {
+                    transform: translateY(-3px);
+                    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+                }
+
+                .badge.bg-orange {
+                    background-color: var(--orange) !important;
+                }
+
+                .evaluation-section {
+                    background-color: white;
+                    border-radius: 12px;
+                    padding: 2.5rem;
+                    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+                    transition: transform 0.3s ease;
+                }
+
+                .evaluation-section:hover {
+                    transform: translateY(-5px);
+                }
+
+                .evaluation-list {
+                    list-style-type: none;
+                    padding: 0;
+                }
+
+                .evaluation-list li {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 1rem 0;
+                    border-bottom: 1px solid #eaeaea;
+                    margin-left: 1rem;
+                    margin-right: 1rem;
+                    color: var(--text-dark);
+                    font-weight: 500;
+                    transition: background-color 0.2s ease;
+                }
+
+                .evaluation-list li:hover {
+                    background-color: rgba(255, 87, 34, 0.05);
+                }
+
+                .evaluation-list li:last-child {
+                    border-bottom: none;
+                }
+
+                .evaluation-list li .score {
+                    color: var(--orange);
+                    font-weight: 700;
+                    font-size: 1.1rem;
+                    background-color: rgba(255, 87, 34, 0.1);
+                    padding: 5px 10px;
+                    border-radius: 20px;
+                }
+            </style>
             {% endblock %}
