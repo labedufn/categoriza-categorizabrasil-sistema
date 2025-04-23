@@ -1,13 +1,16 @@
 {% extends 'core/base.html' %}
 
 {% load static %}
-{% load bootstrap5 %}
+{% load bootstrap3 %}
+{% load widget_tweaks %}
 {% block title %}{% endblock %}
 {% block content %}
 <br>
 <div class="container card">
     <div class="card-body">
         <div class="text-center title-heading">
+            <img src="{% static 'core/img/LOGO.png' %}" class="img-fluid img logo" alt="Logo">
+            <br><br><br>
             <h1>Cadastro</h1>
         </div>
         <link rel="stylesheet" href="">
@@ -19,7 +22,23 @@
                 --background-color: #F4F7F6;
                 --gray-text: #666;
             }
-            .card{
+
+            .btn-primary {
+                background-color: #cc9132;
+                border: none;
+            }
+
+            .btn-primary:hover {
+                background-color: #ad6b00 !important;
+            }
+
+
+            .logo {
+                height: 40%;
+                width: 40%;
+            }
+
+            .card {
                 width: 50%;
             }
 
@@ -279,7 +298,13 @@
                     <div class="col-8">
                         <form class="form" method="post">
                             {% csrf_token %}
-                            {% bootstrap_form form %}
+                            {% bootstrap_field form.nome %}
+                            {% bootstrap_field form.email %}
+                            {% bootstrap_field form.cpf class="form-control mask_cpf" %}
+                            {% bootstrap_field form.tipo_usuario %}
+
+                            {% bootstrap_field form.password1 %}
+                            {% bootstrap_field form.password2 %}
                             {% buttons %}
                             <br>
                             <div class="botoes">
@@ -299,9 +324,14 @@
             document.addEventListener('DOMContentLoaded', function () {
                 var tipoUsuario = "{{ tipo_usuario }}";
                 var selectElement = document.querySelector('[name="tipo_usuario"]');
+                console.log(tipoUsuario)
+                if (tipoUsuario == "") {
+                    const label = document.querySelector('label[for="id_tipo_usuario"]');
+                    selectElement.remove()
+                    label.remove()
+                }
+                else if (tipoUsuario != 'ADM') {
 
-                if (tipoUsuario != 'ADM') {
-                    // Se for usuário de Vigilância, remove opções específicas
                     var optionsToRemove = ['PREFEITURA', 'ADM'];
 
                     optionsToRemove.forEach(function (optionValue) {
@@ -311,8 +341,70 @@
                         }
                     });
                 }
+                document.querySelector('form').addEventListener('submit', function (e) {
+                    const cpf = document.querySelector('.mask_cpf').value;
+                    if (!validarCPF(cpf)) {
+                        e.preventDefault();
+                        // Trigger blur to show error
+                        document.querySelector('.mask_cpf').dispatchEvent(new Event('blur'));
+                    }
+                });
+
+                function validarCPF(cpf) {
+                    cpf = cpf.replace(/[^\d]+/g, '');
+
+                    if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
+
+                    let soma = 0, resto;
+
+                    // Calculate first check digit
+                    for (let i = 0; i < 9; i++) {
+                        soma += parseInt(cpf[i]) * (10 - i);
+                    }
+                    resto = soma % 11;
+                    if (resto < 2) resto = 0;
+                    else resto = 11 - resto;
+                    if (resto !== parseInt(cpf[9])) return false;
+
+                    // Calculate second check digit
+                    soma = 0;
+                    for (let i = 0; i < 10; i++) {
+                        soma += parseInt(cpf[i]) * (11 - i);
+                    }
+                    resto = soma % 11;
+                    if (resto < 2) resto = 0;
+                    else resto = 11 - resto;
+                    return resto === parseInt(cpf[10]);
+                }
+                // Exibe erro se CPF for inválido
+                const campoCPF = document.getElementById("id_cpf");
+
+                campoCPF.addEventListener('change', function () {
+                    const cpf = campoCPF.value;
+                    const isValid = validarCPF(cpf);
+
+                    // Remove existing error feedback
+                    const feedback = campoCPF.parentNode.querySelector('.invalid-feedback');
+                    if (feedback) feedback.remove();
+
+                    if (!isValid) {
+                        console.log("é invalido")
+                        campoCPF.classList.add('is-invalid');
+                        const erro = document.createElement('div');
+                        erro.className = 'invalid-feedback';
+                        erro.textContent = 'CPF inválido';
+                        campoCPF.parentNode.appendChild(erro);
+                    } else {
+                        console.log("é valido")
+
+                        campoCPF.classList.remove('is-invalid');
+                    }
+                });
+
             });
         </script>
+
+
     </div>
 
     {% endblock %}

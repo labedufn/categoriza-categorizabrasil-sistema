@@ -1,6 +1,7 @@
 {% extends 'core/base.html' %}
 {% load static %}
-{% load bootstrap5 %}
+{% load bootstrap3 %}
+
 {% block title %}{% endblock %}
 {% block content %}
 <br>
@@ -8,14 +9,43 @@
     <h1>Lista dos Usuarios</h1>
 </div>
 
-
 <style>
+    body {
+        background-color: #eeeeee;
+        /* Main background color */
+    }
+
+    :root {
+        --primary-orange: #FF6B35;
+        --dark-blue: #1A237E;
+        --light-orange: #FFA063;
+        --background-color: #F4F7F6;
+        --gray-text: #666;
+    }
+    .bi-search {
+        color: white;
+        width: 13;
+        height: 13;
+    }
+
+
+    .btn-primary {
+        background-color: #cc9132;
+        border: none;
+    }
+
+    .btn-primary:hover {
+        background-color: #ad6b00 !important;
+    }
+
     .title-heading h1 {
-        color: #1a237e;
-        font-weight: bold;
+        color: #003963;
+        /* Primary color */
+        font-weight: 600;
         margin: 2rem 0;
         text-transform: uppercase;
         letter-spacing: 1px;
+        font-family: Helvetica;
     }
 
     .table-container {
@@ -26,69 +56,36 @@
         margin: 2rem auto;
     }
 
-    .table {
-        border-collapse: separate;
-        border-spacing: 0;
-        width: 100%;
-        background-color: white;
-    }
-
     .table thead th {
-        background-color: #1a237e;
-        color: white;
+        border-bottom: 1px solid #cc9132;
+        color: #003963;
         font-weight: 600;
         padding: 1rem;
         text-transform: uppercase;
-        font-size: 0.9rem;
-        letter-spacing: 0.5px;
-        border: none;
+        font-size: 0.8rem;
+        font-family: Helvetica;
+
     }
 
-    .table tbody tr {
-        transition: all 0.3s ease;
-    }
 
-    .table tbody tr:hover {
-        background-color: rgba(26, 35, 126, 0.05);
-    }
-
-    .table tbody td {
-        padding: 1rem;
-        border-bottom: 1px solid #e0e0e0;
-        vertical-align: middle;
-    }
-
-    .btn {
-        padding: 0.5rem 1rem;
-        font-weight: 600;
-        border-radius: 4px;
-        transition: all 0.3s ease;
-    }
-
-    .btn:hover {
-        transform: translateY(-2px);
-    }
-
-    .btn-success {
-        background-color: rgb(28, 255, 47) !important;
-        border-color: rgb(28, 255, 47) !important;
-        color: white;
-    }
-
-    .btn-success:hover {
-        background-color: rgb(0, 200, 0) !important;
-        border-color: rgb(0, 200, 0) !important;
-    }
 
     .btn-warning {
-        background-color: rgb(240, 240, 0) !important;
-        border-color: rgb(240, 240, 0) !important;
+        background-color: #003963 !important;
+        /* Accent color */
+        border-color: #003963 !important;
         color: white;
     }
 
     .btn-warning:hover {
-        background-color: rgb(200, 200, 0) !important;
-        border-color: rgb(200, 200, 0) !important;
+        background-color: #a67428 !important;
+        /* Darker shade of accent */
+        border-color: #a67428 !important;
+    }
+
+    /* Keep other button colors unchanged but adjust if needed */
+    .btn-success {
+        background-color: rgb(28, 255, 47) !important;
+        border-color: rgb(28, 255, 47) !important;
     }
 
     .btn-danger {
@@ -96,12 +93,47 @@
         border-color: rgb(250, 0, 20);
     }
 
-    .btn-danger:hover {
-        background-color: rgb(150, 0, 25);
-        border-color: rgb(150, 0, 25);
+    /* Rest of your existing styles */
+    .table {
+        border-collapse: separate;
+        border-spacing: 0;
+        width: 100%;
+        background-color: white;
     }
 
-    /* Responsividade para telas menores */
+    .table tbody td {
+        padding: 1.5rem;
+        border-bottom: 1px solid #e0e0e0;
+        vertical-align: middle;
+        font-size: large;
+        color: #003963;
+        font-weight: 600;
+        font-family: Arial;
+        font-size: 0.9rem;
+    }
+
+    .bi-trash3 {
+        color: red;
+    }
+
+    .bi-pencil {
+        color: #cc9132;
+    }
+
+    .btn {
+
+        font-weight: 600;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+    }
+
+    .icones {
+        width: 1.8rem;
+        /* ou o tamanho que desejar */
+        height: auto;
+        /* outros estilos que desejar */
+    }
+
     @media (max-width: 768px) {
         .table-responsive {
             border-radius: 8px;
@@ -114,50 +146,68 @@
         }
     }
 </style>
+<form method="get" action="" class="mb-4">
+    <div class="input-group">
+        <input type="text" class="form-control" name="q" placeholder="Pesquisar estabelecimentos..."
+            value="{{ search_query }}">
+        <button type="submit" class="btn btn-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                <path
+                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+            </svg>
+            PESQUISAR
+        </button>
+    </div>
+</form>
 <div class="table-responsive table-sm">
-
-
-    <table class="table table-hover">
+    <table class="table">
+        <!-- Table content remains unchanged -->
         <thead>
             <tr>
-                <th scope="col" class="text-center">email</th>
-                <th scope="col" class="text-center">nome</th>
-                <th scope="col" class="text-center">tipo</th>
-                <th scope="col" class="text-center">cpf</th>
-                {% if request.user.tipo_usuario == "ADM"   %}
-                <th class="text-center">Excluir</th>
-                <th class="text-center">Editar</th>
+                <th scope="col" class="text-center align-middle">email</th>
+                <th scope="col" class="text-center align-middle">nome</th>
+                <th scope="col" class="text-center align-middle">tipo</th>
+
+                {% if request.user.tipo_usuario == "ADM" %}
+                <th class="text-center align-middle">Excluir</th>
+                <th class="text-center align-middle">Editar</th>
                 {% endif %}
             </tr>
         </thead>
         <tbody>
             {% for usuario in object_list %}
             <tr>
+                <td class="text-center align-middle">{{usuario.email}}</td>
+                <td class="text-center align-middle">{{usuario.nome}}</td>
+                <td class="text-center align-middle">{{usuario.tipo_usuario}}</td>
 
-                <td class="text-center">{{usuario.email}}</td>
-                <td class="text-center">{{usuario.nome}}</td>
-                <td class="text-center">{{usuario.tipo_usuario}}</td>
-                <td class="text-center">{{usuario.cpf}}</td>
                 {% if request.user.tipo_usuario == "ADM" %}
-                <td class="text-center">
+                <td class="text-center align-middle">
                     {% buttons %}
-                    <a href="{% url 'usuario_delete' usuario.id %}" type="submit"
-                        class="btn btn-danger botao">Excluir</a>
+                    <a href="{% url 'usuario_delete' usuario.id %}" type="submit" class="nav-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-trash3 icones"
+                            viewBox="0 0 16 16">
+                            <path
+                                d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5" />
+                        </svg>
+                    </a>
                     {% endbuttons %}
                 </td>
-
-                <td class="text-center">
+                <td class="text-center align-middle">
                     {% buttons %}
-                    <a href="{% url 'usuario_update' usuario.id %}" type="submit"
-                        class="btn btn-warning botao">Editar</a>
+                    <a href="{% url 'usuario_update' usuario.id %}" type="submit" class="nav-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-pencil icones"
+                            viewBox="0 0 16 16">
+                            <path
+                                d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325" />
+                        </svg>
+                    </a>
                     {% endbuttons %}
                 </td>
-                {% endif  %}
+                {% endif %}
             </tr>
             {% endfor %}
         </tbody>
-
     </table>
 </div>
-
 {% endblock %}

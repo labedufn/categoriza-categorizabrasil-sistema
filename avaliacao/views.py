@@ -128,6 +128,18 @@ def classificar_pontuacao(form):
             classificacao = "A"
         
         return pontuacoes[0], classificacao,lista_somas
+def resetar_pontuacao(form):
+    form.pt_abastecimento_agua = 0
+    form.pt_estrutura = 0
+    form.pt_higienizacao = 0
+    form.pt_controle_integrado  = 0
+    form.pt_manipuladores = 0
+    form.pt_materias_primas = 0
+    form.pt_preparo_alimento = 0
+    form.pt_armazenamento = 0
+    form.total_pontuacao = 0 
+    form.classificacao = "Não possui classificação"
+    return form
 def salvarForm(request, empresa):
     
     try:
@@ -139,40 +151,45 @@ def salvarForm(request, empresa):
 @login_required(login_url="/login")
 def avaliacao_update(request, formulario_existente, empresa):
     if request.method == 'POST':
-        form = FormularioAvaliacao(request.POST, instance=formulario_existente) 
-        if form.is_valid():
-            formulario = form.save(commit=False)
-            formulario.Usuario = request.user
-            
-            
+        if 'botao' in request.POST and request.POST['botao'] == 'salvar':
+            form = FormularioAvaliacao(request.POST, instance=formulario_existente) 
+            if form.is_valid():
+                formulario = form.save(commit=False)
+                formulario.Usuario = request.user
+                formulario = resetar_pontuacao(formulario)
                 
-            empresa.save()
-            formulario.save()
-            messages.success(request, "Os dados do formulario foram salvos!")
-            return render(request, "avaliacao.html",{'form':form, 'empresa_id': empresa.id}) 
-    
+                    
+                empresa.save()
+                formulario.save()
+                messages.success(request, "Os dados do formulario foram salvos!")
+                return render(request, "avaliacao.html",{'form':form, 'empresa_id': empresa.id,'save_pressed':True}) 
+            else:
+                return render(request, "avaliacao.html",{'form':form, 'empresa_id': empresa.id,'save_pressed':False}) 
+
     else:
         form = FormularioAvaliacao(instance=formulario_existente)
-    return render(request, 'avaliacao.html', {'form': form,'empresa_id': empresa.id})
+    return render(request, 'avaliacao.html', {'form': form,'empresa_id': empresa.id,'save_pressed':False})
 
 @login_required(login_url="/login")
 def avaliacao_create(request, empresa):
     if request.method == 'POST':
-        form = FormularioAvaliacao(request.POST)
-        if form.is_valid():
+        if 'botao' in request.POST and request.POST['botao'] == 'salvar':
+            form = FormularioAvaliacao(request.POST)
+            if form.is_valid():
 
-            formulario = form.save(commit=False)
-            formulario.Empresa = empresa
-            formulario.Usuario = request.user
+                formulario = form.save(commit=False)
+                formulario.Empresa = empresa
+                formulario.Usuario = request.user
+                formulario = resetar_pontuacao(formulario)
 
-            formulario.save()
-            messages.success(request, "Os dados do formulario foram salvos!")
-            return render(request, "avaliacao.html",{'form':form, 'empresa_id': empresa.id}) 
-        
+                formulario.save()
+                messages.success(request, "Os dados do formulario foram salvos!")
+                return render(request, "avaliacao.html",{'form':form, 'empresa_id': empresa.id,'save_pressed':True}) 
+            
        
     else:
         form = FormularioAvaliacao()
-    return render(request, "avaliacao.html", {'form': form , 'empresa_id': empresa.id})
+    return render(request, "avaliacao.html", {'form': form , 'empresa_id': empresa.id,'save_pressed':False})
 
 @login_required(login_url="/login")
 def avaliacao(request, id):

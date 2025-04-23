@@ -37,7 +37,8 @@ class RegisterAdminForm(UserCreationForm):
 class RegisterForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ['nome', 'email', 'cpf', 'password1', 'password2']
+        fields = ['nome', 'email', 'cpf', 'tipo_usuario', 'password1', 'password2']
+
         
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

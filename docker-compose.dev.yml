@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:14.5-alpine
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: categorizabd
+      POSTGRES_USER: categoriza
+      POSTGRES_PASSWORD: teste
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+volumes:
+  postgres_data:

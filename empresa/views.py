@@ -7,6 +7,7 @@ from utils.decorators import LoginRequiredMixin
 from .models import Empresa
 from django.contrib import messages
 from avaliacao.models import Formulario
+from django.db.models import Q
 
 @login_required(login_url="/login")
 def empresa_update(request, id):
@@ -79,4 +80,24 @@ class EmpresaList(LoginRequiredMixin, ListView):
 
         # Adiciona o dicionário de formulários ao contexto
         context['formularios'] = formularios
+        context['search_query'] = self.request.GET.get('q', '')
         return context
+    
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        
+        # Get search query from URL parameters
+        search_query = self.request.GET.get('q')
+        
+        if search_query:
+            # Search across multiple fields (nome, email, username, etc.)
+            queryset = queryset.filter(
+                Q(nome_fantasia__icontains=search_query) |
+                Q(cnpj__icontains=search_query) |
+                Q(bairro__icontains=search_query)
+            )
+        
+        return queryset.order_by('-nome_fantasia', 'nome_fantasia')
+
+    
