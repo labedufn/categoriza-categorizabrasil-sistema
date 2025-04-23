@@ -1,6 +1,6 @@
 {% extends 'core/base.html' %}
 {% load static %}
-{% load bootstrap5 %}
+{% load bootstrap3 %}
 {% block title %}{% endblock %}
 
 {% block content %}
@@ -14,7 +14,7 @@
     {% endfor %}
 </div>
 {% endif %}
-<div class="container card w-100">
+<div class="container card">
 
     <div class="card-body">
 
@@ -34,32 +34,92 @@
                     --gray-text: #666;
                 }
 
-                .title-heading h1 {
-                    color: #003963 !important;
+
+                .card {
+                    width: 80%;
+                }
+
+                .title-heading {
+                    color: #1a237e;
+
                     font-weight: bold;
                     margin: 2rem 0;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
                 }
 
-                .form label {
-                    color: #003963;
+                .form-container {
+                    background-color: white;
+                    border-radius: 12px;
+                    box-shadow: 0 4px 16px rgba(26, 35, 126, 0.1);
+                    padding: 2.5rem;
+                    margin: 2rem auto;
+                    max-width: 800px;
+                    width: 90%;
+                    /* Make the form container responsive */
+                }
+
+
+                .form-label {
+                    color: #1a237e;
+
                     font-weight: 600;
+                    margin-bottom: 0.5rem;
                 }
 
-                .form input,
-                .form select,
-                .form textarea {
+                .form-control {
+                    border: 2px solid #e0e0e0;
+                    border-radius: 6px;
+                    padding: 0.75rem;
+                    transition: all 0.3s ease;
+                    font-size: 1rem;
+                    width: 100%;
+                    /* Make form controls responsive */
+                }
+
+                .form-control:focus {
+                    border-color: #1a237e;
+                    box-shadow: 0 0 0 0.2rem rgba(26, 35, 126, 0.15);
+                }
+
+                .form-select {
                     border: 2px solid #e0e0e0 !important;
-                    border-radius: 4px !important;
-                    padding: 8px !important;
-                    margin-bottom: 1rem !important;
-                    content: "" !important;
+                    border-radius: 6px !important;
+                    padding: 0.75rem !important;
+                    transition: all 0.3s ease !important;
+                    font-size: 1rem !important;
+                    width: 100%;
+                    /* Make select elements responsive */
                 }
 
-                .form input:focus,
-                .form select:focus,
-                .form textarea:focus {
-                    border-color: #003963 !important;
-                    box-shadow: 0 0 0 0.2rem rgba(26, 35, 126, 0.25) !important;
+                .form-select option:hover {
+                    background-color: #1a237e !important;
+                    color: white
+                }
+
+
+                .form-select:focus {
+                    border-color: #1a237e !important;
+                    box-shadow: 0 0 0 0.2rem rgba(26, 35, 126, 0.15) !important;
+                }
+
+                .form-text {
+                    color: #666 !important;
+                    font-size: 0.875rem;
+                    margin-top: 4rem;
+                }
+
+                /* Estilo especial para campos de senha */
+                input[type="password"] {
+                    letter-spacing: 0.1em;
+                }
+
+                /* Estilo para campos obrigatórios */
+                .required label::after {
+                    content: "*";
+                    color: #ff5722;
+                    margin-left: 4px;
+
                 }
 
                 .btn-primary {
@@ -72,11 +132,9 @@
                     letter-spacing: 1px;
                     transition: all 0.3s ease;
                     margin-top: 1rem;
-                }
-
-                .btn-primary:focus {
-                    outline: none !important;
-                    box-shadow: none !important;
+                    border-radius: 6px;
+                    width: 100%;
+                    /* Make buttons responsive */
                 }
 
                 .btn-primary:hover {
@@ -87,14 +145,13 @@
                 }
 
                 .botoes {
-                    margin: auto;
                     display: flex;
-                    justify-content: space-between;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 1rem;
+                    /* Add gap between buttons */
                     width: 100%;
-                    flex-wrap: wrap;
                 }
-
-
 
                 .btn-secondary {
                     background-color: var(--dark-blue) !important;
@@ -106,6 +163,8 @@
                     letter-spacing: 1px;
                     transition: all 0.3s ease;
                     margin-top: 1rem;
+                    width: 100%;
+                    /* Make buttons responsive */
                 }
 
                 .btn-secondary:focus {
@@ -120,64 +179,148 @@
                     box-shadow: 0 4px 10px rgba(26, 35, 126, 0.3);
                 }
 
-                .container {
-                    margin-top: 2rem;
-                    margin-bottom: 2rem;
-                }
-
-                /* Estilo para mensagens de erro do formulário */
+                /* Mensagens de erro */
                 .invalid-feedback {
-                    color: #003963;
+
+                    color: #ff5722;
+                    font-size: 0.875rem;
+                    margin-top: 0.25rem;
                 }
 
+                .is-invalid {
+                    border-color: #ff5722 !important;
+
+                }
+
+                /* Animação de entrada */
+                @keyframes slideIn {
+                    from {
+                        opacity: 0;
+                        transform: translateY(20px);
+                    }
+
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+
+                .form {
+                    animation: slideIn 0.5s ease-out;
+                }
+
+                /* Separador de seções */
+                .form-section {
+                    border-bottom: 2px solid #e0e0e0;
+                    margin-bottom: 2rem;
+                    padding-bottom: 1rem;
+                }
+
+                /* Responsividade */
                 @media (max-width: 768px) {
-                    .teste {
-                        flex-direction: column;
-                        /* Empilha os botões */
-                        align-items: stretch;
-                        /* Faz os botões ocuparem a largura total */
+                    .card {
+                        width: 90% !important;
+                        /* Increase card width on smaller screens */
+                        margin: 0 auto;
+                        /* Center the card */
+                    }
+
+                    .form-container {
+                        padding: 1.5rem;
+                        margin: 1rem;
+                        border-radius: 8px;
                     }
 
                     .btn-primary,
                     .btn-secondary {
                         width: 100%;
-                        /* Largura total em telas pequenas */
+                        padding: 0.75rem 1rem;
+                    }
+
+                    .botoes {
+                        flex-direction: column;
                     }
                 }
 
-                /* Media query para telas muito pequenas */
-                @media (max-width: 480px) {
+                @media (max-width: 576px) {
+                    .card {
+                        width: 95% !important;
+                        /* Further increase card width on very small screens */
+                    }
+
+                    small {
+                        display: none;
+                    }
+
+                    .form-container {
+                        padding: 1rem;
+                        margin: 0.5rem;
+                    }
+
+                    .title-heading {
+                        margin: 1rem 0;
+                    }
+
+                    .title-heading h1 {
+                        font-size: 1.2rem;
+                    }
+
+                    .form-control,
+                    .form-select {
+                        padding: 0.5rem;
+                    }
 
                     .btn-primary,
                     .btn-secondary {
                         padding: 0.5rem 1rem;
-                        /* Reduz o padding em telas muito pequenas */
-                        font-size: 0.9rem;
-                        /* Reduz o tamanho da fonte */
+                        font-size: xx-small;
                     }
                 }
+
+                /* Tooltip customizado */
+                .tooltip {
+                    background-color: #1a237e;
+                    color: white;
+                    padding: 0.5rem 1rem;
+                    border-radius: 4px;
+                    font-size: 0.875rem;
+                }
+
+                /* Checkbox estilizado */
+                .form-check-input:checked {
+                    background-color: #ff5722;
+                    border-color: #ff5722;
+                }
             </style>
+
 
             <div class="row">
 
                 <div class="container">
                     <div class="row">
-                        <br /><br />
                         <div class="col"></div>
                         <div class="col-8">
                             <form class="form" method="post">
                                 {% csrf_token %}
+
                                 {% bootstrap_form form %}
+
 
 
                                 <div class="botoes">
 
+                                    <button type="submit" name="botao" class="btn btn-primary" value="salvar"
+                                        id="botao_salvar">Salvar
+                                        Formulario
+                                    </button>
+                                    {% if save_pressed == True %}
+                                    <button type="button" name="botao_relatorio" class="btn btn-secondary"
+                                        style="display: block;" id="botao_relatorio" data-empresa_id="{{ empresa_id }}">
+                                        Gerar relatório
+                                    </button>
+                                    {% endif %}
 
-                                    <button type="button" name="botao" class="btn btn-primary" id="botao_relatorio"
-                                        data-empresa_id="{{ empresa_id }}"> Enviar Formulario</button>
 
-                                    <button type="submit" name="botao" class="btn btn-secondary" value="salvar">Salvar
-                                        Formulario</button>
 
                                 </div>
 
@@ -196,141 +339,144 @@
             <script>
                 document.addEventListener('DOMContentLoaded', function () {
                     const form = document.querySelector('form');
-                    const empresa_id = document.getElementById('botao_relatorio').dataset.empresa_id
-                    const question = document.getElementById('id_questao1');
-                    const question2 = document.getElementById('id_questao2');
-                    const question3 = document.getElementById('id_questao3');
-                    const questionsToCheck = [
-                        'id_questao1',
-                        'id_questao2',
-                        'id_questao3'
-                    ]
+                    const botaoRelatorio = document.getElementById('botao_relatorio');
+                    const botaoSalvar = document.getElementById('botao_salvar');
 
-                    const alerts = document.querySelectorAll('.alert');
 
-                    // Define o tempo (em milissegundos) para o alerta desaparecer
-                    const alertTimeout = 5000; // 5000ms = 5 segundos
+                    function desativar_campos_exeto_primeiros() {
+                        const fields = ['questao1', 'questao1_descricao', 'questao2', 'questao2_descricao'
+                            , 'questao3', 'questao3_descricao', 'questao4', 'questao4_descricao',
+                            'questao5', 'questao5_descricao', 'questao6', 'questao6_descricao',
+                            'questao7', 'questao7_descricao', 'questao8', 'questao8_descricao',
+                            'questao9', 'questao9_descricao', 'questao10', 'questao10_descricao',
+                            'questao11', 'questao11_descricao', 'questao12', 'questao12_descricao',
+                            'questao13', 'questao13_descricao', 'questao14', 'questao14_descricao',
+                            'questao15', 'questao15_descricao', 'questao16', 'questao16_descricao',
+                            'questao17', 'questao17_descricao', 'questao18', 'questao18_descricao'
+                            , 'questao19', 'questao19_descricao', 'questao20', 'questao20_descricao',
+                            'questao21', 'questao21_descricao', 'questao22', 'questao22_descricao',
+                            'questao23', 'questao23_descricao', 'questao24', 'questao24_descricao',
+                            'questao25', 'questao25_descricao', 'questao26', 'questao26_descricao',
+                            'questao27', 'questao27_descricao', 'questao28', 'questao28_descricao',
+                            'questao29', 'questao29_descricao', 'questao30', 'questao30_descricao',
+                            'questao31', 'questao31_descricao', 'questao32', 'questao32_descricao',
+                            'questao33', 'questao33_descricao', 'questao34', 'questao34_descricao'
+                            , 'questao35', 'questao35_descricao', 'questao36', 'questao36_descricao',
+                            'questao37', 'questao37_descricao', 'questao38', 'questao38_descricao',
+                            'questao39', 'questao39_descricao', 'questao40', 'questao40_descricao',
+                            'questao41', 'questao41_descricao', 'questao42', 'questao42_descricao',
+                            'questao43', 'questao43_descricao', 'questao44', 'questao44_descricao',
+                            'questao45', 'questao45_descricao', 'questao46', 'questao46_descricao',
+                            'questao47', 'questao47_descricao', 'questao48', 'questao48_descricao',
+                            'questao49', 'questao49_descricao', 'questao50', 'questao50_descricao',
+                            'questao51', 'questao51_descricao',
+                        ]
 
-                    alerts.forEach(alert => {
-                        setTimeout(() => {
-                            // Remove o alerta depois de 5 segundos
-                            alert.classList.remove('show');
-                            alert.classList.add('fade');
-                            setTimeout(() => alert.remove(), 150); // Remove do DOM após a animação de fade
-                        }, alertTimeout);
-                    });
-                    function disableAllDescricao() {
-                        const formElements = form.elements;
-                        for (let i = 0; i < formElements.length; i++) {
-                            const element = formElements[i];
-                            if (element.id.includes("descricao")) {
-                                element.disabled = true
+                        // Percorre todos os campos
+                        fields.forEach(field => {
+                            const element = document.getElementById(`id_${field}`);
+                            console.log(`id_${field}`)
+                            
+                            // Verifica se o elemento existe e não é um dos campos permitidos
+                            if (element && !['questao1', 'questao2', 'questao3', 'questao1_descricao', 'questao2_descricao', 'questao3_descricao'].includes(field)) {
+                                element.disabled = true; // Desativa o campo
+                                element.value = ""
                             }
-                        }
+
+                        });
                     }
-                    function disableDescricao(campo) {
-                        campo_descricao = document.getElementById(campo.id + "_descricao")
-                        campo_descricao.value = ""
-                        campo_descricao.disabled = true
 
 
+                    function atualizarCamposDescricao() {
+                        const selects = form.querySelectorAll('select');
+                        selects.forEach(select => {
+                            const textarea = getDescricaoField(select);
 
-
-                    }
-                    function enableDescricao(campo) {
-
-                        campo_descricao = document.getElementById(campo.id + "_descricao")
-                        campo_descricao.required = true
-                        campo_descricao.disabled = false
-
-
-
-                    }
-                    function controllerDescricao(event) {
-                        campo = event.target
-                        if (campo.value == "IN") {
-                            enableDescricao(campo)
-                        }
-                        else {
-                            disableDescricao(campo)
-                        }
-
-                    }
-                    function disableForm(id) {
-                        const formElements = form.elements;
-
-
-                        for (let i = 0; i < formElements.length; i++) {
-                            const element = formElements[i];
-                            if (questionsToCheck.includes(element.id) || id + "_descricao" == element.id) {
-                                continue;
+                            if (textarea) {
+                                if (select.value === 'IN') {
+                                    textarea.disabled = false;
+                                } else {
+                                    textarea.disabled = true;
+                                    textarea.value = ''; // limpa o campo se não for inadequado
+                                }
                             }
-                            element.disabled = true;
-                            if (element.tagName === 'SELECT') {
-                                element.style.backgroundColor = '#f0f0f0';
-                                element.style.cursor = 'not-allowed';
-                            }
-                        }
+                        });
                     }
 
-                    function enableForm() {
-                        const formElements = form.elements;
-
-                        for (let i = 0; i < formElements.length; i++) {
-                            const element = formElements[i];
-
-
-                            element.disabled = false;
-
-                            if (element.tagName === 'SELECT') {
-                                element.style.backgroundColor = '';
-                                element.style.cursor = '';
-                            }
+                    // Esconde o botão de relatório ao alterar qualquer campo
+                    function esconderBotaoRelatorio() {
+                        if (botaoRelatorio) {
+                            botaoRelatorio.style.display = 'none';
                         }
                     }
+                    function getDescricaoField(questaoSelect) {
+                        // Get the base field name (e.g., "questao1" from "id_questao1")
+                        const baseName = questaoSelect.name.replace('questao', '');
 
-                    function update_tudo(event) {
-                        console.log('Selected value1:', event.target);
-                        teste = event.target;
-                        if (teste.value === 'IN') {
-                            disableForm(event.target.id);
-                        } else {
-                            enableForm();
-                        }
+                        // Find the corresponding description field
+                        const descricaoField = document.querySelector(`[name="questao${baseName}_descricao"]`);
+
+                        return descricaoField;
                     }
-                    function req_para_relatorio(id) {
-                        console.log("teste2:" + id)
-                        const url = `/empresa/relatorio/${id}/`;
 
-                        fetch(url, {
-                            method: 'POST',
-                            headers: {
-                                'X-CSRFToken': "{{ csrf_token }}",
-                            },
-                        }).then(response => {
-                            if (response.ok) {
-                                location.reload(); // Recarrega a página após sucesso
+
+
+                    function valida_form() {
+                        const selects = form.querySelectorAll('select');
+
+
+                        selects.forEach(select => {
+                            // Check if the select value is empty
+                            if (select.value === '') {
+
+                                esconderBotaoRelatorio();
+                                select.classList.add('is-invalid');
+                            } else if (select.value === "IN") {
+                                textarea = getDescricaoField(select)
+                                if (textarea.value === "") {
+
+                                    esconderBotaoRelatorio();
+                                    textarea.classList.add('is-invalid')
+                                }
                             } else {
-                                alert('Ocorreu um erro ao atualizar.');
+                                select.classList.remove('is-invalid');
                             }
-                        })
-                            .catch(error => {
-                                console.error('Erro:', error);
-                            });
-                    }
-                    disableAllDescricao();
-                    const formElements = form.elements;
-                    for (let i = 0; i < formElements.length; i++) {
-                        element = formElements[i];
-                        if (!element.id.includes("descricao") && !questionsToCheck.includes(element.id)) {
-                            element.addEventListener('change', controllerDescricao)
-                        }
-                    }
-                    question.addEventListener('change', update_tudo);
-                    question2.addEventListener('change', update_tudo);
-                    question3.addEventListener('change', update_tudo);
-                    botao_relatorio.addEventListener('click', () => req_para_relatorio(empresa_id))
+                        });
 
+
+                    }
+
+
+                    form_valid = false
+                    valida_form();
+                    // Mostrar botão de relatório ao clicar em "Salvar Formulário"
+
+
+                    // Inicializar os campos corretamente
+                    atualizarCamposDescricao();
+
+                    // Adiciona eventos nos selects
+                    const selects = form.querySelectorAll('select');
+                    selects.forEach(select => {
+                        select.addEventListener('change', function () {
+                            atualizarCamposDescricao();
+                            esconderBotaoRelatorio();
+                            if (select.value == "IN") {
+                                if (['questao1', 'questao2', 'questao3'].includes(select.name)) {
+                                    console.log("teste")
+                                    desativar_campos_exeto_primeiros();
+                                }
+                            }
+
+                        });
+                    });
+
+                    // Adiciona eventos de mudança em todos os inputs, selects e textareas
+                    const inputs = form.querySelectorAll('input, textarea, select');
+                    inputs.forEach(el => {
+                        el.addEventListener('change', esconderBotaoRelatorio);
+                        el.addEventListener('input', esconderBotaoRelatorio);
+                    });
 
 
                 })

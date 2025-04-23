@@ -1,29 +1,41 @@
 {% extends 'core/base.html' %}
 
 {% load static %}
-{% load bootstrap5 %}
+{% load bootstrap3 %}
 
 {% block title %}{% endblock %}
 {% block content %}
 <br>
 <div class="container card">
     <div class="card-body">
+        
         <div class="text-center title-heading">
+            <img src="{% static 'core/img/LOGO.png' %}" class="img-fluid img logo" alt="Logo">
+            <br><br><br>
             <h1>Fazer Login</h1>
         </div>
 
 
         <style>
             :root {
-    --primary-orange: #FF6B35;
-    --dark-blue: #003963;
-    --light-orange: #FFA063;
-    --background-color: #F4F7F6;
-    --gray-text: #666;
-}
+
+                --primary-orange: #FF6B35;
+                --dark-blue: #1A237E;
+                --light-orange: #FFA063;
+                --background-color: #F4F7F6;
+                --gray-text: #666;
+            }
+            .logo{
+                width: 40%;
+                height: 40%;
+            }
+            .card {
+                width: 50%;
+            }
+
 
             .title-heading {
-                color: var(--dark-blue);
+                color: #1a237e;
                 font-weight: bold;
                 margin: 2rem 0;
                 text-transform: uppercase;
@@ -37,10 +49,12 @@
                 padding: 2.5rem;
                 margin: 2rem auto;
                 max-width: 800px;
+                width: 90%;
+                /* Make the form container responsive */
             }
 
             .form-label {
-                color: var(--dark-blue);
+                color: #1a237e;
                 font-weight: 600;
                 margin-bottom: 0.5rem;
             }
@@ -51,33 +65,56 @@
                 padding: 0.75rem;
                 transition: all 0.3s ease;
                 font-size: 1rem;
+                width: 100%;
+                /* Make form controls responsive */
             }
 
             .form-control:focus {
-                border-color: var(--dark-blue);
+                border-color: #1a237e;
                 box-shadow: 0 0 0 0.2rem rgba(26, 35, 126, 0.15);
-                /*box-shadow: 0 0 0 0.2rem rgba(255, 107, 53, 0.15);*/
+            }
+
+            .form-select {
+                border: 2px solid #e0e0e0 !important;
+                border-radius: 6px !important;
+                padding: 0.75rem !important;
+                transition: all 0.3s ease !important;
+                font-size: 1rem !important;
+                width: 100%;
+                /* Make select elements responsive */
+            }
+
+            .form-select option:hover {
+                background-color: #1a237e !important;
+                color: white
+            }
+
+            .form-select:focus {
+                border-color: #1a237e !important;
+                box-shadow: 0 0 0 0.2rem rgba(26, 35, 126, 0.15) !important;
             }
 
             .form-text {
-                color: var(--gray-text);
+                color: #666 !important;
                 font-size: 0.875rem;
-                margin-top: 0.25rem;
+                margin-top: 4rem;
             }
 
+            /* Estilo especial para campos de senha */
             input[type="password"] {
                 letter-spacing: 0.1em;
             }
 
+            /* Estilo para campos obrigatórios */
             .required label::after {
                 content: "*";
-                color: var(--primary-orange);
+                color: #ff5722;
                 margin-left: 4px;
             }
 
             .btn-primary {
-                background-color: var(--primary-orange) !important;
-                border-color: var(--primary-orange) !important;
+                background-color: #ff5722 !important;
+                border-color: #ff5722 !important;
                 color: white;
                 padding: 0.75rem 2rem;
                 font-weight: 600;
@@ -85,13 +122,25 @@
                 letter-spacing: 1px;
                 transition: all 0.3s ease;
                 margin-top: 1rem;
+                border-radius: 6px;
+                width: 100%;
+                /* Make buttons responsive */
             }
 
             .btn-primary:hover {
-                background-color: var(--light-orange) !important;
-                border-color: var(--light-orange) !important;
+                background-color: #f4511e !important;
+                border-color: #f4511e !important;
                 transform: translateY(-2px);
-                box-shadow: 0 4px 12px rgba(255, 107, 53, 0.2);
+                box-shadow: 0 4px 12px rgba(244, 81, 30, 0.2);
+            }
+
+            .botoes {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+                /* Add gap between buttons */
+                width: 100%;
             }
 
             .btn-secondary {
@@ -104,33 +153,34 @@
                 letter-spacing: 1px;
                 transition: all 0.3s ease;
                 margin-top: 1rem;
+                width: 100%;
+                /* Make buttons responsive */
+            }
 
+            .btn-secondary:focus {
+                outline: none !important;
+                box-shadow: 0 4px 12px rgba(244, 81, 30, 0.2) !important;
             }
 
             .btn-secondary:hover {
-                opacity: 0.9;
-                transform: translateY(-2px);
-                box-shadow: 0 4px 12px rgba(26, 35, 126, 0.2);
+                background-color: #273469 !important;
+                border-color: #273469 !important;
+                transform: translateY(-3px);
+                box-shadow: 0 4px 10px rgba(26, 35, 126, 0.3);
             }
 
-            .botoes {
-                display: grid;
-                align-items: center;
-                justify-content: center;
-                margin: auto;
-                width: 100%;
-            }
-
+            /* Mensagens de erro */
             .invalid-feedback {
-                color: var(--primary-orange);
+                color: #ff5722;
                 font-size: 0.875rem;
                 margin-top: 0.25rem;
             }
 
             .is-invalid {
-                border-color: var(--primary-orange) !important;
+                border-color: #ff5722 !important;
             }
 
+            /* Animação de entrada */
             @keyframes slideIn {
                 from {
                     opacity: 0;
@@ -147,33 +197,20 @@
                 animation: slideIn 0.5s ease-out;
             }
 
+            /* Separador de seções */
             .form-section {
                 border-bottom: 2px solid #e0e0e0;
                 margin-bottom: 2rem;
                 padding-bottom: 1rem;
             }
 
-            .form-check-input:checked {
-                background-color: var(--pri-orange);
-                border-color: var(--primary-orange);
-            }
-
-            .link-secondary {
-                color: var(--dark-blue) !important;
-                text-decoration: none;
-                transition: all 0.3s ease;
-            }
-
-            .link-secondary:hover {
-                color: var(--primary-orange) !important;
-                text-decoration: underline;
-            }
-
             /* Responsividade */
             @media (max-width: 768px) {
                 .card {
                     width: 80% !important;
-                    /* Further increase card width on very small screens */
+                    /* Increase card width on smaller screens */
+                    margin: 0 auto;
+                    /* Center the card */
                 }
 
                 .form-container {
@@ -182,20 +219,18 @@
                     border-radius: 8px;
                 }
 
-                .botoes {
-                    flex-direction: column;
-                }
-
                 .btn-primary,
                 .btn-secondary {
                     width: 100%;
-                    margin-top: 0.5rem;
+                    padding: 0.75rem 1rem;
                 }
 
+                .botoes {
+                    flex-direction: column;
+                }
             }
 
             @media (max-width: 576px) {
-
                 .card {
                     width: 95% !important;
                     /* Further increase card width on very small screens */
@@ -211,17 +246,11 @@
                 }
 
                 .title-heading {
-
                     margin: 1rem 0;
                 }
 
                 .title-heading h1 {
                     font-size: 1.2rem;
-                }
-                .btn-primary,
-                .btn-secondary {
-                    padding: 0.5rem 1rem;
-                    font-size: xx-small;
                 }
 
                 .form-control,
@@ -229,8 +258,26 @@
                     padding: 0.5rem;
                 }
 
-                
+                .btn-primary,
+                .btn-secondary {
+                    padding: 0.5rem 1rem;
+                    font-size: xx-small;
+                }
+            }
 
+            /* Tooltip customizado */
+            .tooltip {
+                background-color: #1a237e;
+                color: white;
+                padding: 0.5rem 1rem;
+                border-radius: 4px;
+                font-size: 0.875rem;
+            }
+
+            /* Checkbox estilizado */
+            .form-check-input:checked {
+                background-color: #ff5722;
+                border-color: #ff5722;
             }
         </style>
 
@@ -252,7 +299,7 @@
                             <div class="botoes">
 
                                 <button type="submit" class="btn btn-primary">Fazer login</button>
-                                <p><a href="{% url 'cadastro'%}" class="btn btn-secondary ">Não possui conta?</a></p>
+                                <a href="{% url 'cadastro'%}" class="btn btn-secondary ">Não possui conta?</a>
 
                             </div>
                             {% endbuttons %}

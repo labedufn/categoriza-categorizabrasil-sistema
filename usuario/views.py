@@ -14,6 +14,7 @@ from django.urls import reverse_lazy
 from .form import LoginForm
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.forms import UserChangeForm
+from django.db.models import Q
 
 class PrefeituraAdmAccessMixin(UserPassesTestMixin):
     def test_func(self):
@@ -31,12 +32,33 @@ class UserListView(LoginRequiredMixin, ListView):
     context_object_name = 'usuarios'
     login_url = '/login'  
     
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated or request.user.tipo_usuario != 'ADM':
+            messages.error(request, "Você não tem permissão para acessar esta página.")
+            return redirect("empresa_list")
+        return super().dispatch(request, *args, **kwargs)
+
     def get_queryset(self):
-        if (not self.request.user.tipo_usuario == 'ADM'):
-            qs = User.objects.filter(is_active=True).exclude(tipo_usuario = 'ADM').order_by('-tipo_usuario', 'nome')
-        else:
-            qs = User.objects.filter(is_active=True).order_by('-tipo_usuario', 'nome')
-        return qs
+        queryset = super().get_queryset().filter(is_active=True)
+        
+        # Get search query from URL parameters
+        search_query = self.request.GET.get('q')
+        
+        if search_query:
+            # Search across multiple fields (nome, email, username, etc.)
+            queryset = queryset.filter(
+                Q(nome__icontains=search_query) |
+                Q(email__icontains=search_query) |
+                Q(tipo_usuario__icontains=search_query)
+            )
+        
+        return queryset.order_by('-tipo_usuario', 'nome')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Add search query to context for template
+        context['search_query'] = self.request.GET.get('q', '')
+        return context
 
 
 class UserAdminRegisterView(PrefeituraAdmAccessMixin,CreateView):
@@ -160,10 +182,6 @@ def usuario_delete(request, id):
         return render(request, "user_delete.html", {'user': user})
     else:
         return redirect("home")
-
-
 def logout_view(request):
     logout(request)
     return redirect('cadastro')
-
-

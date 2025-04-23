@@ -12,9 +12,10 @@ import re
 
 class Empresa(models.Model):
         
-        CHOICES_CNAE = [("refeições","5611-2/01 - restaurantes e similares"),
-                        ("bebidas","5611-2/02 - bares e outros estabelecimentos especializados  em   servir bebidas"),
-                        ("lanches","5611-2/03- lanchonetes, casas de chá, de sucos e similares")]
+        CHOICES_CNAE = [("5611-2/01","5611-2/01 - restaurantes e similares"),
+                        ("5611-2/02","5611-2/02 - bares e outros estabelecimentos especializados  em   servir bebidas"),
+                        ("5611-2/03","5611-2/03- lanchonetes, casas de chá, de sucos e similares"),
+                        ("OUTRO", "OUTRO")]
         
 
         CHOICES_NUMEROS_REFEICOES = [("100","até 100"),

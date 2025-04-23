@@ -14,7 +14,7 @@ services:
 
   web:
     build: .
-    command: sh -c "/wait-for-db.sh && python manage.py migrate && python manage.py runserver 0.0.0.0:8001"
+    command: "python manage.py runserver 0.0.0.0:8001"
     env_file:
       - .env
     volumes:

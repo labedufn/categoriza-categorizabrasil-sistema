@@ -23,7 +23,17 @@
                 --gray-text: #666;
             }
 
-            
+
+            .btn-primary {
+                background-color: #cc9132;
+                border: none;
+            }
+
+            .btn-primary:hover {
+                background-color: #ad6b00 !important;
+            }
+
+
 
             .logo {
                 height: 40%;
@@ -294,7 +304,7 @@
                             {% bootstrap_field form.email %}
                             {% bootstrap_field form.cpf class="form-control mask_cpf" %}
                             {% bootstrap_field form.tipo_usuario %}
-                            
+
                             {% bootstrap_field form.password1 %}
                             {% bootstrap_field form.password2 %}
                             {% buttons %}
@@ -317,13 +327,17 @@
                 var tipoUsuario = "{{ tipo_usuario }}";
                 var selectElement = document.querySelector('[name="tipo_usuario"]');
                 console.log(tipoUsuario)
-                if (tipoUsuario == ""){
+
+                if (tipoUsuario == "") {
+
                     const label = document.querySelector('label[for="id_tipo_usuario"]');
                     selectElement.remove()
                     label.remove()
                 }
                 else if (tipoUsuario != 'ADM') {
-                    
+
+
+
                     var optionsToRemove = ['PREFEITURA', 'ADM'];
 
                     optionsToRemove.forEach(function (optionValue) {
@@ -396,7 +410,9 @@
             });
         </script>
 
-        
+
+
+
     </div>
 
     {% endblock %}

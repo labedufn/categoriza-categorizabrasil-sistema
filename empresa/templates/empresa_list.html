@@ -1,6 +1,6 @@
 {% extends 'core/base.html' %}
 {% load static %}
-{% load bootstrap5 %}
+{% load bootstrap3 %}
 {% load filtros_empresa %}
 
 {% block title %}{% endblock %}
@@ -10,13 +10,51 @@
     <h1>Lista dos Estabelecimentos</h1>
 </div>
 <style>
+    body {
+        background-color: #eeeeee;
+        /* Main background color */
+    }
+
+    :root {
+        --primary-orange: #FF6B35;
+        --dark-blue: #1A237E;
+        --light-orange: #FFA063;
+        --background-color: #F4F7F6;
+        --gray-text: #666;
+    }
+
+    .btn-primary {
+        background-color: #cc9132;
+        border: none;
+    }
+    .btn-primary:hover{
+        background-color: #ad6b00 !important;
+    }
+
+    .imagem-classificacao {
+        width: 3.5rem;
+        /* ou o tamanho que desejar */
+        height: auto;
+        /* outros estilos que desejar */
+    }
+
+    .icones {
+        width: 2rem;
+        /* ou o tamanho que desejar */
+        height: auto;
+        /* outros estilos que desejar */
+    }
+
     .title-heading h1 {
         color: #003963;
-        font-weight: bold;
+
+        /* Primary color */
+        font-weight: 600;
+
         margin: 2rem 0;
         text-transform: uppercase;
         letter-spacing: 1px;
-
+        font-family: Helvetica;
     }
 
     .table-container {
@@ -27,77 +65,42 @@
         margin: 2rem auto;
     }
 
-    .table {
-        border-collapse: separate;
-        border-spacing: 0;
-        width: 100%;
-        background-color: white;
-    }
-
     .table thead th {
-        background-color: #003963;
-        color: white;
+
+        border-bottom: 1px solid #cc9132;
+        color: #003963;
+
         font-weight: 600;
         padding: 1rem;
         text-transform: uppercase;
-        font-size: 0.9rem;
-        letter-spacing: 0.5px;
-        border: none;
+        font-size: 0.8rem;
+        font-family: Helvetica;
+
     }
 
-    .table tbody tr {
-        transition: all 0.3s ease;
-    }
 
-    .table tbody tr:hover {
-        background-color: rgba(26, 35, 126, 0.05);
-    }
-
-    .table tbody td {
-        padding: 1rem;
-        border-bottom: 1px solid #e0e0e0;
-        vertical-align: middle;
-    }
-
-    .btn {
-        margin-top: 1rem;
-        padding: 0.5rem 1rem;
-        font-weight: 600;
-        border-radius: 4px;
-        transition: all 0.3s ease;
-    }
-
-    .imagem-classificacao {
-        width: 4rem;
-        /* ou o tamanho que desejar */
-        height: auto;
-        /* outros estilos que desejar */
-    }
-
-    .btn:hover {
-        transform: translateY(-2px);
-    }
-
-    .btn-success {
-        background-color: rgb(28, 255, 47) !important;
-        border-color: rgb(28, 255, 47) !important;
-        color: white;
-    }
-
-    .btn-success:hover {
-        background-color: rgb(0, 200, 0) !important;
-        border-color: rgb(0, 200, 0) !important;
-    }
 
     .btn-warning {
-        background-color: rgb(240, 240, 0) !important;
-        border-color: rgb(240, 240, 0) !important;
+        background-color: #003963 !important;
+        /* Accent color */
+        border-color: #003963 !important;
         color: white;
     }
 
     .btn-warning:hover {
-        background-color: rgb(200, 200, 0) !important;
-        border-color: rgb(200, 200, 0) !important;
+        background-color: #a67428 !important;
+        /* Darker shade of accent */
+        border-color: #a67428 !important;
+    }
+
+    .bi-pencil-square {
+        color: #003963 !important;
+    }
+
+    /* Keep other button colors unchanged but adjust if needed */
+    .btn-success {
+        background-color: rgb(28, 255, 47) !important;
+        border-color: rgb(28, 255, 47) !important;
     }
 
     .btn-danger {
@@ -105,12 +108,47 @@
         border-color: rgb(250, 0, 20);
     }
 
-    .btn-danger:hover {
-        background-color: rgb(150, 0, 25);
-        border-color: rgb(150, 0, 25);
+    /* Rest of your existing styles */
+    .table {
+        border-collapse: separate;
+        border-spacing: 0;
+        width: 100%;
+        background-color: white;
     }
 
-    /* Responsividade para telas menores */
+    .table tbody td {
+        padding: 1.5rem;
+        border-bottom: 1px solid #e0e0e0;
+        vertical-align: middle;
+        font-size: large;
+        color: #003963;
+        font-weight: 600;
+        font-family: Arial;
+        font-size: 0.9rem;
+    }
+
+    .bi-trash3 {
+        color: red;
+    }
+
+    .bi-pencil {
+        color: #cc9132;
+
+    }
+
+    .bi-search {
+        color: white;
+        width: 13;
+        height: 13;
+    }
+
+    .btn {
+
+        font-weight: 600;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+    }
+
     @media (max-width: 768px) {
         .table-responsive {
             border-radius: 8px;
@@ -123,28 +161,42 @@
         }
     }
 </style>
+
+<form method="get" action="" class="mb-4">
+    <div class="input-group">
+        <input type="text" class="form-control" name="q" placeholder="Pesquisar estabelecimentos..." value="{{ search_query }}">
+        <button type="submit" class="btn btn-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                <path
+                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+            </svg>
+            PESQUISAR
+        </button>
+    </div>
+</form>
+
 <div class="table-responsive table-sm">
 
 
-    <table class="table table-hover">
+    <table class="table">
         <thead>
             <tr>
-                <th scope="col" class="text-center">CNPJ</th>
-                <th scope="col" class="text-center">NOME FANSTASIA</th>
-                <th scope="col" class="text-center">ENDEREÇO</th>
-                <th scope="col" class="text-center">BAIRRO</th>
-                <th scope="col" class="text-center">CLASSIFICAÇÃO</th>
+                <th scope="col" class="text-center align-middle">CNPJ</th>
+                <th scope="col" class="text-center align-middle">NOME FANSTASIA</th>
+                <th scope="col" class="text-center align-middle">ENDEREÇO</th>
+                <th scope="col" class="text-center align-middle">BAIRRO</th>
+                <th scope="col" class="text-center align-middle">CLASSIFICAÇÃO</th>
                 <th class="text-center">AVALIAR</th>
                 {% if request.user.tipo_usuario == "ADM" %}
-                    <th class="text-center">Excluir</th>
+                <th class="text-center align-middle">Excluir</th>
                 {% endif %}
                 {% if request.user.tipo_usuario == "ADM" or request.user.tipo_usuario == "VIGILANCIA" %}
-                    <th class="text-center">Editar</th>
+                <th class="text-center align-middle">Editar</th>
                 {% endif %}
 
 
 
-                <th class="text-center">GERAR RELATORIO</th>
+                <th class="text-center align-middle">GERAR RELATORIO</th>
 
             </tr>
         </thead>
@@ -152,17 +204,20 @@
             {% for empresa in empresas %}
             {% with formulario=formularios|dict_get:empresa.id %}
             <tr>
-                <td class="text-center">{{empresa.cnpj}}</td>
-                <td class="text-center">{{empresa.nome_fantasia}}</td>
-                <td class="text-center">{{empresa.endereco}}</td>
-                <td class="text-center">{{empresa.bairro}}</td>
-                <td class="text-center">
+                <td class="text-center align-middle">{{empresa.cnpj}}</td>
+                <td class="text-center align-middle">{{empresa.nome_fantasia}}</td>
+                <td class="text-center align-middle">{{empresa.endereco}}</td>
+                <td class="text-center align-middle">{{empresa.bairro}}</td>
+                <td class="text-center align-middle">
                     {% if formulario.classificacao == 'A' %}
-                    <img src="{% static 'core/img/A_PNG_.png' %}" alt="Classificação A" class="imagem-classificacao">
+                    <img src="{% static 'core/img/A_PNG_.png' %}" class="imagem-classificacao" alt="Classificação A"
+                        class="imagem-classificacao">
                     {% elif formulario.classificacao == 'B' %}
-                    <img src="{% static 'core/img/B_PNG_.png' %}" alt="Classificação B" class="imagem-classificacao">
+                    <img src="{% static 'core/img/B_PNG_.png' %}" class="imagem-classificacao" alt="Classificação B"
+                        class="imagem-classificacao">
                     {% elif formulario.classificacao == 'C' %}
-                    <img src="{% static 'core/img/c_PNG_.png' %}" alt="Classificação C" class="imagem-classificacao">
+                    <img src="{% static 'core/img/c_PNG_.png' %}" class="imagem-classificacao" alt="Classificação C"
+                        class="imagem-classificacao">
                     {% elif formulario.classificacao == 'PENDENTE' %}
                     {{empresa.classificacao}}
                     {% else %}
@@ -171,34 +226,61 @@
 
                 </td>
 
-                <td class="text-center">
+                <td class="text-center align-middle">
                     {% buttons %}
-                    <a href="{% url 'avaliacao' empresa.id %}" type="submit" class="btn btn-success">Avaliar</a>
+                    <a href="{% url 'avaliacao' empresa.id %}" type="submit" class="nav-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-pencil-square icones"
+                            viewBox="0 0 16 16">
+                            <path
+                                d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                            <path fill-rule="evenodd"
+                                d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                        </svg>
+                    </a>
                     {% endbuttons %}
                 </td>
                 {% if request.user.tipo_usuario == "ADM" %}
-                    <td class="text-center">
-                        {% buttons %}
-                        <a href="{% url 'usuario_delete' usuario.id %}" type="submit"
-                            class="btn btn-danger botao">Excluir</a>
-                        {% endbuttons %}
-                    </td>
+                <td class="text-center align-middle">
+                    {% buttons %}
+                    <a href="{% url 'empresa_delete' empresa.id %}" type="submit" class="nav-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-trash3 icones "
+                            viewBox="0 0 16 16">
+                            <path
+                                d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5" />
+                        </svg>
+                    </a>
+                    {% endbuttons %}
+                </td>
                 {% endif %}
 
                 {% if request.user.tipo_usuario == "ADM" or request.user.tipo_usuario == "VIGILANCIA" %}
 
 
-                <td class="text-center">
+                <td class="text-center align-middle">
                     {% buttons %}
-                    <a href="{% url 'usuario_update' usuario.id %}" type="submit"
-                        class="btn btn-warning botao">Editar</a>
+                    <a href="{% url 'empresa_update' empresa.id %}" type="submit" class="nav-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-pencil icones"
+                            viewBox="0 0 16 16">
+                            <path
+                                d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325" />
+                        </svg>
+                    </a>
                     {% endbuttons %}
                 </td>
                 {% endif %}
 
-                <td class="text-center">
+                <td class="text-center align-middle">
                     {% buttons %}
-                    <a href="{% url 'relatorio' empresa.id %}" type="submit" class="btn btn-info">Relatorio</a>
+                    <a href="{% url 'relatorio' empresa.id %}" type="submit" class="nav-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-clipboard icones"
+                            viewBox="0 0 16 16">
+                            <path
+                                d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z" />
+                            <path
+                                d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z" />
+                        </svg>
+                    </a>
+
                     {% endbuttons %}
                 </td>
 
