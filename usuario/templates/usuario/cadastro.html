@@ -23,6 +23,7 @@
                 --gray-text: #666;
             }
 
+
             .btn-primary {
                 background-color: #cc9132;
                 border: none;
@@ -31,6 +32,7 @@
             .btn-primary:hover {
                 background-color: #ad6b00 !important;
             }
+
 
 
             .logo {
@@ -325,12 +327,16 @@
                 var tipoUsuario = "{{ tipo_usuario }}";
                 var selectElement = document.querySelector('[name="tipo_usuario"]');
                 console.log(tipoUsuario)
+
                 if (tipoUsuario == "") {
+
                     const label = document.querySelector('label[for="id_tipo_usuario"]');
                     selectElement.remove()
                     label.remove()
                 }
                 else if (tipoUsuario != 'ADM') {
+
+
 
                     var optionsToRemove = ['PREFEITURA', 'ADM'];
 
@@ -403,6 +409,8 @@
 
             });
         </script>
+
+
 
 
     </div>
