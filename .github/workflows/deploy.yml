@@ -13,11 +13,12 @@ jobs:
       - name: Checkout do Código
         uses: actions/checkout@v3
 
-      - name: Deploy
+      - name: Deploy para Dokploy
         env:
-          COOLIFY_API_KEY: ${{ secrets.COOLIFY_API_KEY }}
-          COOLIFY_APP_ID_MAIN: ${{ secrets.COOLIFY_APP_ID_MAIN }}
-          COOLIFY_URL: ${{ secrets.COOLIFY_URL }}
+          DOKPLOY_API_KEY: ${{ secrets.DOKPLOY_API_KEY }}
+          DOKPLOY_APP_ID: ${{ secrets.DOKPLOY_APP_ID }}
+          DOKPLOY_URL: ${{ secrets.DOKPLOY_URL }}
         run: |
-          curl -X POST "${{ env.COOLIFY_URL }}/api/v1/deploy/${{ env.COOLIFY_APP_ID_MAIN }}" \
-            -H "Authorization: Bearer ${{ env.COOLIFY_API_KEY }}"
+          curl -X POST "${{ env.DOKPLOY_URL }}/api/v1/applications/${{ env.DOKPLOY_APP_ID }}/deploy" \
+            -H "Authorization: Bearer ${{ env.DOKPLOY_API_KEY }}" \
+            -H "Content-Type: application/json"
