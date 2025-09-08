@@ -27,7 +27,8 @@
         background-color: #cc9132;
         border: none;
     }
-    .btn-primary:hover{
+
+    .btn-primary:hover {
         background-color: #ad6b00 !important;
     }
 
@@ -164,7 +165,8 @@
 
 <form method="get" action="" class="mb-4">
     <div class="input-group">
-        <input type="text" class="form-control" name="q" placeholder="Pesquisar estabelecimentos..." value="{{ search_query }}">
+        <input type="text" class="form-control" name="q" placeholder="Pesquisar estabelecimentos..."
+            value="{{ search_query }}">
         <button type="submit" class="btn btn-primary">
             <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                 <path
@@ -221,7 +223,7 @@
                     {% elif formulario.classificacao == 'PENDENTE' %}
                     {{empresa.classificacao}}
                     {% else %}
-                    NÃO POSSUI CLASSIFICAÇÃO
+                    {{empresa.classificacao}}
                     {% endif %}
 
                 </td>
@@ -271,7 +273,7 @@
 
                 <td class="text-center align-middle">
                     {% buttons %}
-                    <a href="{% url 'relatorio' empresa.id %}" type="submit" class="nav-link">
+                    <a href="{% url 'relatorio' empresa.id %}" type="submit" class="nav-link" id="botao_relatorio">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-clipboard icones"
                             viewBox="0 0 16 16">
                             <path
@@ -290,6 +292,7 @@
         </tbody>
 
     </table>
+   
 </div>
 
 {% endblock %}

@@ -123,8 +123,8 @@
                 }
 
                 .btn-primary {
-                    background-color: #003963 !important;
-                    border-color: #003963 !important;
+                    background-color: var(--primary-orange) !important;
+                    border-color: var(--primary-orange) !important;
                     color: white;
                     padding: 0.75rem 2rem;
                     font-weight: 600;
@@ -376,7 +376,7 @@
                         fields.forEach(field => {
                             const element = document.getElementById(`id_${field}`);
                             console.log(`id_${field}`)
-                            
+
                             // Verifica se o elemento existe e não é um dos campos permitidos
                             if (element && !['questao1', 'questao2', 'questao3', 'questao1_descricao', 'questao2_descricao', 'questao3_descricao'].includes(field)) {
                                 element.disabled = true; // Desativa o campo
@@ -478,6 +478,30 @@
                         el.addEventListener('input', esconderBotaoRelatorio);
                     });
 
+                    document.getElementById('botao_relatorio').addEventListener('click', function () {
+                        const empresaId = this.dataset.empresa_id;
+
+                        // Cria dinamicamente um form para POST
+                        
+                        
+                        let urlBase = "{% url 'relatorio' 0 %}"; // gera /empresa/relatorio/0/
+                        let actionUrl = urlBase.replace("0", empresaId);
+
+                        const form = document.createElement('form');
+                        form.method = 'POST';
+                        form.action = actionUrl;
+
+                        // Adiciona o token CSRF
+                        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = 'csrfmiddlewaretoken';
+                        input.value = csrfToken;
+                        form.appendChild(input);
+
+                        document.body.appendChild(form);
+                        form.submit();
+                    });
 
                 })
 

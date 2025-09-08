@@ -233,6 +233,7 @@ def relatorio(request, id):
                 empresa.classificacao = formulario_existente.classificacao
                 empresa.save()
             formulario_existente.save()
+            print(formulario_existente.classificacao)
             messages.success(request, "Os dados do relatorio foram atualizados!")
             url = reverse('relatorio', kwargs={'id': id})
             return redirect(url)
