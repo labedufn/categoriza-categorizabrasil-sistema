@@ -25,6 +25,7 @@ services:
       - .:/app
     ports:
       - "8001:8001"
+    restart: on-failure 
     depends_on:
       db:
         condition: service_healthy
