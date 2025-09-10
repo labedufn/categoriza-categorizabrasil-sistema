@@ -28,8 +28,6 @@ services:
     ports:
       - 8001
     depends_on:
-      db:
-        condition: service_healthy
-
+      - db
 volumes:
   postgres_data:
