@@ -9,8 +9,4 @@ services:
       - .:/app
     ports:
       - 8001
-    depends_on:
-      db:
-        condition: service_healthy
-volumes:
-  postgres_data:
+
