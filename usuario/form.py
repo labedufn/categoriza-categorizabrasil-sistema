@@ -41,6 +41,7 @@ class RegisterForm(UserCreationForm):
 
         
     def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
         # Personaliza os labels dos campos se necessário
         self.fields['nome'].label = 'Nome Completo'
@@ -48,6 +49,8 @@ class RegisterForm(UserCreationForm):
         self.fields['cpf'].label = 'CPF'
         self.fields['password1'].label = 'Senha'
         self.fields['password2'].label = 'Confirme a Senha'
+        if not (user and user.is_staff):  # ou user.is_superuser
+            self.fields.pop('tipo_usuario')
         
     def clean_email(self):
         email = self.cleaned_data.get('email')

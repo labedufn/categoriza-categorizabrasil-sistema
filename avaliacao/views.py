@@ -156,11 +156,12 @@ def avaliacao_update(request, formulario_existente, empresa):
             if form.is_valid():
                 formulario = form.save(commit=False)
                 formulario.Usuario = request.user
+                formulario.save()
                 formulario = resetar_pontuacao(formulario)
                 
                     
                 empresa.save()
-                formulario.save()
+                
                 messages.success(request, "Os dados do formulario foram salvos!")
                 return render(request, "avaliacao.html",{'form':form, 'empresa_id': empresa.id,'save_pressed':True}) 
             else:
@@ -180,9 +181,10 @@ def avaliacao_create(request, empresa):
                 formulario = form.save(commit=False)
                 formulario.Empresa = empresa
                 formulario.Usuario = request.user
+                formulario.save()
                 formulario = resetar_pontuacao(formulario)
 
-                formulario.save()
+               
                 messages.success(request, "Os dados do formulario foram salvos!")
                 return render(request, "avaliacao.html",{'form':form, 'empresa_id': empresa.id,'save_pressed':True}) 
             

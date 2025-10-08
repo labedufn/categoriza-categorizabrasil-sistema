@@ -61,7 +61,7 @@ class UserListView(LoginRequiredMixin, ListView):
         return context
 
 
-class UserAdminRegisterView(PrefeituraAdmAccessMixin,CreateView):
+class UserAdminRegisterView(LoginRequiredMixin,PrefeituraAdmAccessMixin,CreateView):
     model = User
     form_class = RegisterAdminForm
     template_name = 'usuario/cadastro.html'
@@ -88,13 +88,14 @@ class UserAdminRegisterView(PrefeituraAdmAccessMixin,CreateView):
         
         return redirect(self.get_success_url())
 
-class UserRegisterView(CreateView):
+class UserRegisterView(LoginRequiredMixin,CreateView):
     model = User
     form_class = RegisterForm
     template_name = 'usuario/cadastro.html'
     
     def get_success_url(self):
         return reverse('empresa')  # Certifique-se de que 'empresa' existe nas suas URLs
+    
     
     def form_valid(self, form):
         
