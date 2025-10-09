@@ -1,6 +1,6 @@
 services:
   db:
-    containew_name: db
+    container_name: db
     image: postgres:14.5-alpine
     env_file:
       - .env
@@ -30,7 +30,7 @@ services:
       - "8000:8000"
     depends_on:
       db:
-        - db
+        condition: service_healthy 
 
 volumes:
   postgres_data:
