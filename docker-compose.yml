@@ -6,7 +6,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     env_file:
-      - .env.dev
+      - .env
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
@@ -20,7 +20,7 @@ services:
   web:
     build: .
      env_file:
-      - .env.dev
+      - .env
     command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/app
