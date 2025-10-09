@@ -1,6 +1,5 @@
 services:
   db:
-    container_name: db
     image: postgres:14.5-alpine
     env_file:
       - .env
@@ -17,9 +16,9 @@ services:
       interval: 5s
       timeout: 3s
       retries: 10
+    networks: [backend]
 
   web:
-    container_name: web
     build: .
     env_file:
       - .env
@@ -30,7 +29,12 @@ services:
       - "8000:8000"
     depends_on:
       db:
-        condition: service_healthy 
+        condition: service_healthy
+    networks: [backend]
 
 volumes:
   postgres_data:
+
+networks:
+  backend:
+    driver: bridge
