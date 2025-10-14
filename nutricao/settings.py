@@ -8,7 +8,7 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "chave-padrao-segura")
-DEBUG = os.getenv("DEBUG", "False") == "False"
+DEBUG = os.getenv("DEBUG", "False") == "True"
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost").split(",")
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'nutricao/static')
