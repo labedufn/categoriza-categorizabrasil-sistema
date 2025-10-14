@@ -61,7 +61,7 @@ class UserListView(LoginRequiredMixin, ListView):
         return context
 
 
-class UserAdminRegisterView(PrefeituraAdmAccessMixin,CreateView):
+class UserAdminRegisterView(LoginRequiredMixin,PrefeituraAdmAccessMixin,CreateView):
     model = User
     form_class = RegisterAdminForm
     template_name = 'usuario/cadastro.html'
@@ -95,6 +95,7 @@ class UserRegisterView(CreateView):
     
     def get_success_url(self):
         return reverse('empresa')  # Certifique-se de que 'empresa' existe nas suas URLs
+    
     
     def form_valid(self, form):
         
@@ -150,20 +151,29 @@ class CustomLogoutView(LogoutView):
 
 @login_required(login_url="/login")
 def usuario_update(request, id):
-    user = get_object_or_404(User, pk=id)
-    if request.user.tipo_usuario == "ADM":
-        if request.method == "POST":
-            form = CustomUserChangeForm(request.POST, instance=user)
-            if form.is_valid():
-                form.save()
-                messages.success(request, 'Usuário atualizado com sucesso!')
-                return redirect('home')
-        else:
-            form = CustomUserChangeForm(instance=user)
-        
-        return render(request, "usuario_update.html", {'form': form, 'user': user})
-    else:
+    user_para_editar = get_object_or_404(User, pk=id)
+
+    # Verifica se o usuário logado é ADM ou o próprio dono do perfil
+    if not (request.user.tipo_usuario == "ADM" or request.user.id == user_para_editar.id):
+        messages.error(request, "Você não tem permissão para editar este perfil.")
         return redirect("home")
+
+    if request.method == "POST":
+        # Passa o request.user também no POST
+        form = CustomUserChangeForm(request.POST, instance=user_para_editar, user=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Usuário atualizado com sucesso!')
+            return redirect('home')
+    else:
+        # Mantém como estava no GET
+        form = CustomUserChangeForm(instance=user_para_editar, user=request.user)
+
+    context = {
+        'form': form,
+        'user_para_editar': user_para_editar
+    }
+    return render(request, "usuario_update.html", context)
 
     
 

@@ -25,10 +25,13 @@
                         a senha?</a></p>
 
                 <div class="botoes">
-
+                    {% if user.is_authenticated == False %}
                     <button type="submit" class="btn btn-primary">Fazer login</button>
-
+                    
                     <a href="{% url 'login'%}" class="btn btn-secondary">Já possui conta?</a>
+                    {% else %}
+                    <button type="submit" class="btn btn-primary">Cadastrar usuario</button>
+                    {% endif %}
 
                 </div>
                 {% endbuttons %}

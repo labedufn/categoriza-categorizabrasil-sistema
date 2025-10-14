@@ -41,6 +41,7 @@ class RegisterForm(UserCreationForm):
 
         
     def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
         # Personaliza os labels dos campos se necessário
         self.fields['nome'].label = 'Nome Completo'
@@ -48,6 +49,8 @@ class RegisterForm(UserCreationForm):
         self.fields['cpf'].label = 'CPF'
         self.fields['password1'].label = 'Senha'
         self.fields['password2'].label = 'Confirme a Senha'
+        if not (user and user.is_staff):  # ou user.is_superuser
+            self.fields.pop('tipo_usuario')
         
     def clean_email(self):
         email = self.cleaned_data.get('email')
@@ -74,20 +77,39 @@ class LoginForm(forms.Form):
     )
 
 class CustomUserChangeForm(UserChangeForm):
-    class Meta:
-        TIPOS_USUARIO = [
+    
+    # É uma boa prática definir as opções como um atributo de classe
+    TIPOS_USUARIO = [
         ("VIGILANCIA", "Vigilância"),
         ("PREFEITURA", "Prefeitura"),
         ("ADM", "Administrador"),
         ("OUTRO", "Outro")
-        ]
+    ]
+    
+    # Defina o campo aqui para poder referenciá-lo facilmente
+    tipo_usuario = forms.ChoiceField(
+        choices=TIPOS_USUARIO,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
 
+    class Meta:
         model = User
-        fields = ['nome', 'email',"tipo_usuario","cpf","password"]  # Removidos first_name e last_name
+        # Remova 'password', pois não é seguro editá-lo diretamente aqui.
+        # Use PasswordChangeForm para isso.
+        fields = ['nome', 'email', "cpf", "tipo_usuario"]
         widgets = {
             'nome': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
-            'cpf':forms.TextInput(attrs={'class':'form-control'}),
-            'tipo_usuario':forms.Select(choices=TIPOS_USUARIO, attrs={'class':'form-control'}),
-            'password':forms.TextInput(attrs={'class':'form-control'})
+            'cpf': forms.TextInput(attrs={'class': 'form-control'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None) 
+        
+        super().__init__(*args, **kwargs)
+        
+        # Agora, a lógica para remover o campo
+        if self.user and self.user.tipo_usuario != 'ADM':
+            # Use 'tipo_usuario' (singular), que é o nome correto do campo
+            del self.fields['tipo_usuario']
+    

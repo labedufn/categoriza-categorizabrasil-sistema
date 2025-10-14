@@ -23,7 +23,7 @@ def login_view(request):
 
         return render(request, 'usuario/login.html', {'form': form})
             
-# @login_required(login_url = "/login")
-# def home(request):
-#     usuarios = Usuario.objects.all()
-#     return render(request,"core/home.html",{"users":usuarios})
+@login_required(login_url = "/login")
+def home(request):
+     usuarios = Usuario.objects.all()
+     return render(request,"core/home.html",{"users":usuarios})
