@@ -12,38 +12,29 @@ services:
     ports:
       - "5433:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 5s
-      timeout: 5s
-      retries: 5
-    
+      timeout: 3s
+      retries: 10
+    networks: [backend]
 
   web:
     build: .
-    # command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - .:/app
-      - static_data:/app/staticfiles
-    ports:
-      - 8000:8000
     env_file:
       - .env
-    depends_on:
-      - db
-
-  nginx:
-    image: nginx:alpine
-    ports:
-      - "80:80" # Exposição pública
-      - "443:443"
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro # Configuração do Nginx
-      - static_data:/usr/share/nginx/html/staticfiles # Ponto crítico: Leitura do volume estático
+      - .:/app
+    ports:
+      - "8000:8000"
     depends_on:
-      - web
+      db:
+        condition: service_healthy
+    networks: [backend]
 
 volumes:
   postgres_data:
-  static_data:
 
-
+networks:
+  backend:
+    driver: bridge

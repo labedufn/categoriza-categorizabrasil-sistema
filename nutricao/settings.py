@@ -8,10 +8,11 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "chave-padrao-segura")
-DEBUG = False
+DEBUG = os.getenv("DEBUG", "False") == "True"
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost").split(",")
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'nutricao/static')
 STATIC_URL = '/static/'
-STATIC_ROOT = "/app/staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "static"]  
 
 INSTALLED_APPS = [
@@ -75,7 +76,7 @@ WSGI_APPLICATION = 'nutricao.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv("POSTGRES_DB", "categorizadb"),
+        'NAME': os.getenv("POSTGRES_DB", "categorizabd"),
         'USER': os.getenv("POSTGRES_USER", "categoriza"),
         'PASSWORD': os.getenv("POSTGRES_PASSWORD", 'teste'),
         'HOST': os.getenv("DATABASE_HOST", "db"),
